@@ -3,7 +3,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-include_once '../../SSFrame/App.php';
+include_once '../vendor/App.php';
 
 $app = \SSFrame\App::getInstance();
 

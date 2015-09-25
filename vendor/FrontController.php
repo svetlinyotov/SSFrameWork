@@ -1,10 +1,6 @@
 <?php
 
 /**
- * This file may not be redistributed in whole or significant part.
- * ------------------ THIS IS NOT FREE SOFTWARE -------------------
- *
- * Copyright 2015 All Rights Reserved
  *
  * Calls a router
  *
