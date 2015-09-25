@@ -67,6 +67,7 @@ class FrontController {
         $this->method = $this->router->method;
         $this->params = $this->router->params;
 
+        //echo "<pre>".print_r($this->router->route, true)."</pre>";
 
         if($this->controller == null){
             if(config("app.second_step_routing") === false) {
@@ -76,7 +77,7 @@ class FrontController {
             $this->setRouter(new UrlRouter());
             $this->parseRouter();
 
-            $this -> action = ucfirst($this -> controller).'Controller@'.$this->method;
+            $this -> action = $this -> controller.'Controller@'.$this->method;
             if($this->checkIfRouteDefined() == true){
                 throw new \Exception('Action '.$this->action.' already defined in a custom route');
             }
@@ -105,7 +106,7 @@ class FrontController {
     }
 
     private function loadRoute(){
-        $file = config("app.controller_default_namespace").'\\' . ucfirst($this -> controller).'Controller';
+        $file = $this -> controller.'Controller';
 
         if(!class_exists($file)) {
             throw new \Exception('Class '.$file.' not found.');

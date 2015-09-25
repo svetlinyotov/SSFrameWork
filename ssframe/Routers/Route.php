@@ -16,7 +16,6 @@
 
 namespace SSFrame\Routers;
 
-use SSFrame\FrontController;
 
 class Route implements \SSFrame\Routers\RouterInterface {
 
@@ -27,21 +26,32 @@ class Route implements \SSFrame\Routers\RouterInterface {
     public $method = null;
     public $params = array();
 
+    public function printRoute()
+    {
+        return $this->routesTree;
+    }
+
     /**
      * Add new route to list of available routes
      *
      * @param $method
      * @param $route
      * @param $action
-     * @throws \Exception
+     * @param bool $area
+     * @return array
      */
-    public static function addRoute($method, $route, $action)
+    public static function addRoute($method, $route, $action, $area = false)
     {
         $method = (array)$method;
         if (array_diff($method, self::$allowedMethods)) {
             //throw new \Exception('Method:' . $method . ' is not valid');
             $method = 'get';
         }
+
+        if($area != false) {
+            $action = $area."\\".$action;
+        }
+        $methods = [];
         if (array_search('any', $method) !== false) {
             $methods = ['get' => $action, 'post' => $action, 'put' => $action];
         } else {
@@ -49,7 +59,8 @@ class Route implements \SSFrame\Routers\RouterInterface {
                 $methods[$v] = $action;
             }
         }
-        self::$rawRoutes[] = ['route' => $route, 'method' => $methods];
+            self::$rawRoutes[] = ['route' => $route, 'method' => $methods];
+
     }
 
     /**
@@ -106,9 +117,10 @@ class Route implements \SSFrame\Routers\RouterInterface {
             if (!isset($node['exec']['method'][$method]) && !isset($node['exec']['method']['any'])) {
                 throw new \Exception('Method: ' . $method . ' is not allowed for this route');
             }
-            $this->controller = str_replace('Controller', '', explode("@", $node['exec']['method'][$method])[0]);
+            $this->controller = \SSFrame\Common::str_lreplace('Controller', '', explode("@", $node['exec']['method'][$method])[0]);
             $this->method = explode("@", $node['exec']['method'][$method])[1];
             $this->params = $params;
+            $this->route = $this->routesTree;
         }
         $this->rowRoutes = self::$rawRoutes;
 
@@ -139,6 +151,9 @@ class Route implements \SSFrame\Routers\RouterInterface {
         if (mb_substr($route, -1, 1) == '/') {
             $route = substr($route, 0, -1);
         }
+        $route = str_replace("///", "/", $route);
+        $route = str_replace("//", "/", $route);
+
         $result = explode('/', $route);
         $result[0] = '/';
         $ret = [];
@@ -187,6 +202,32 @@ class Route implements \SSFrame\Routers\RouterInterface {
     }
 
     public static function match($method, $uri, $action){
-        return self::addRoute($method, $uri, $action);
+        self::addRoute($method, $uri,  config("app.controller_default_namespace") . "\\" . $action);
+    }
+
+    public static function area(Array $params, $routes)
+    {
+        $name = $params['name'];
+        $prefix = $params['prefix'];
+
+        if($prefix == null){
+            $prefix = $name;
+        }
+
+        $prefix = str_replace("/", "", $prefix);
+
+        foreach ($routes as $route) {
+            $_route = str_replace("//", "/", "/".$prefix."/".$route[1]);
+            $_route = str_replace("//", "/", $_route);
+            foreach(self::$rawRoutes as $key=>$rows){
+                if($_route == $rows['route']){
+                    unset(self::$rawRoutes[$key]);
+                }
+            }
+            self::addRoute($route[0], $_route, "Areas\\".ucfirst($name)."\\Controllers\\".$route[2]);
+        }
+
+
+        //echo "<pre>".print_r(self::$rawRoutes, true)."</pre>";
     }
 }

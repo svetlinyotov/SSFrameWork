@@ -18,10 +18,7 @@ namespace SSFrame;
 
 include_once "Loader.php";
 
-use SSFrame\Loader;
-use SSFrame\Config;
 use SSFrame\Routers\Route;
-use SSFrame\Routers\UrlRouter;
 
 class App {
 
@@ -64,6 +61,7 @@ class App {
         }
 
         $this -> _frontController -> parseRouter();
+
     }
 
     public static function getInstance() {

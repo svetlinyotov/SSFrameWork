@@ -18,8 +18,8 @@ namespace SSFrame\Routers;
 
 class UrlRouter implements \SSFrame\Routers\RouterInterface {
 
-    public $controller = null;
-    public $method = null;
+    public $controller = "Home";
+    public $method = "index";
     public $params = array();
 
     public function getURI($method = null) {

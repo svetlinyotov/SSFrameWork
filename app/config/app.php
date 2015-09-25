@@ -9,6 +9,7 @@ return [
 
     'namespaces' => [
         'Controllers' => __DIR__.'\..\controllers',
+        'Areas' => __DIR__.'\..\areas'
     ],
 
 ];

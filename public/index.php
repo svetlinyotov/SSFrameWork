@@ -14,5 +14,4 @@ function config($param) {
     return \SSFrame\Config::get($param);
 }
 
-
 $app->run();
