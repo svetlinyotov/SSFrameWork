@@ -35,7 +35,9 @@ final class Loader {
                 $_path = str_replace('\\', DIRECTORY_SEPARATOR, $_path);
                 $_path = $path.$_path.".php";
 
-                include "$_path";
+                if(file_exists($_path)) {
+                    include "$_path";
+                }
             }
         }
     }
@@ -47,7 +49,7 @@ final class Loader {
             if($_path && is_readable($_path) && is_dir($_path)){
                 self::$namespaces[$namespace.'\\'] = $_path . DIRECTORY_SEPARATOR;
             } else {
-                throw new \Exception('Invalid namespace path or the path is not readable', 403);
+                throw new \Exception('Invalid namespace path: '.$path.' or the path is not readable', 403);
             }
         } else {
             throw new \Exception('Namespace missing', 400);

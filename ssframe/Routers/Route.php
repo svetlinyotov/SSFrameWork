@@ -16,10 +16,12 @@
 
 namespace SSFrame\Routers;
 
+use SSFrame\FrontController;
+
 class Route implements \SSFrame\Routers\RouterInterface {
 
     private static $rawRoutes = [];
-    private $routesTree = null;
+    protected $routesTree = null;
     private static $allowedMethods = ['get', 'post', 'put', 'any'];
     public $controller = null;
     public $method = null;
@@ -37,7 +39,8 @@ class Route implements \SSFrame\Routers\RouterInterface {
     {
         $method = (array)$method;
         if (array_diff($method, self::$allowedMethods)) {
-            throw new \Exception('Method:' . $method . ' is not valid');
+            //throw new \Exception('Method:' . $method . ' is not valid');
+            $method = 'get';
         }
         if (array_search('any', $method) !== false) {
             $methods = ['get' => $action, 'post' => $action, 'put' => $action];
@@ -88,7 +91,11 @@ class Route implements \SSFrame\Routers\RouterInterface {
                 $node = $node['?'];
                 $params[$node['name']] = $v['name'];
             } else {
-                throw new \Exception('Route for uri: ' . $uri . ' was not found');
+                foreach (self::$rawRoutes as $route) {
+                    if($node['exec']['method'][$method] == array_values($route['method'])[0]){
+                        throw new \Exception('Route for uri: ' . $uri . ' was not found');
+                    }
+                }
             }
         }
         //check for route with optional parameters that are not in request url until valid action is found
@@ -102,13 +109,11 @@ class Route implements \SSFrame\Routers\RouterInterface {
             $this->controller = str_replace('Controller', '', explode("@", $node['exec']['method'][$method])[0]);
             $this->method = explode("@", $node['exec']['method'][$method])[1];
             $this->params = $params;
-            return [
-                'route' => $node['exec']['route'],
-                'method' => $method,
-                'action' => $node['exec']['method'][$method],
-                'params' => $params];
         }
-        throw new \Exception('Route for uri: ' . $uri . ' was not found');
+        $this->rowRoutes = self::$rawRoutes;
+
+
+        //throw new \Exception('Route for uri: ' . $uri . ' was not found');
     }
     /**
      * Load routes tree structure that was taken from dump() method

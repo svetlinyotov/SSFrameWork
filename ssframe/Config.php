@@ -68,13 +68,18 @@ class Config {
             if(!isset(self::$configArray[basename($file)])){
                 self::includeConfigFile($file);
             }
+
+            if(!isset(self::$configArray[basename($file)][$key])){
+                self::$configArray[basename($file)][$key] = 0;
+            }
+
             return self::$configArray[basename($file)][$key];
         }
     }
 
     public static function getInstance() {
         if(!self::$_instance) {
-            self::$_instance = new \SSFrame\Config();
+            self::$_instance = new Config();
         }
 
         return self::$_instance;

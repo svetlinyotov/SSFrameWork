@@ -1,9 +1,9 @@
 <?php
 
 ini_set('display_errors', 1);
-error_reporting(E_ALL);
+error_reporting(E_ALL ^ E_NOTICE);
 
-include_once '../vendor/App.php';
+include_once '../ssframe/App.php';
 
 $app = \SSFrame\App::getInstance();
 

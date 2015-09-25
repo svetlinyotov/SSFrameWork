@@ -18,6 +18,11 @@ namespace SSFrame;
 
 include_once "Loader.php";
 
+use SSFrame\Loader;
+use SSFrame\Config;
+use SSFrame\Routers\Route;
+use SSFrame\Routers\UrlRouter;
+
 class App {
 
     private static $_instance = null;
@@ -25,12 +30,12 @@ class App {
     private $router = null;
 
     private function __construct() {
-        \SSFrame\Loader::envParser();
-        \SSFrame\Loader::registerNamespace('SSFrame', dirname(__DIR__).'/SSFrame');
-        \SSFrame\Loader::registerAutoLoad();
-        \SSFrame\Config::getInstance()->setConfigFolder(\SSFrame\Loader::env("CONFIG_DIR"));
-        \SSFrame\Loader::registerNamespaces(\SSFrame\Config::get('app.namespaces'));
-        $this -> setRouter(\SSFrame\Config::get('app.router'));
+        Loader::envParser();
+        Loader::registerNamespace('SSFrame', dirname(__DIR__).'/SSFrame');
+        Loader::registerAutoLoad();
+        Config::getInstance()->setConfigFolder(Loader::env("CONFIG_DIR"));
+        Loader::registerNamespaces(Config::get('app.namespaces'));
+        $this -> setRouter(Config::get('app.router'));
 
     }
 
@@ -49,14 +54,13 @@ class App {
     }
 
     public function run() {
-        $this -> _frontController = \SSFrame\FrontController::getInstance();
+        $this -> _frontController = FrontController::getInstance();
 
         if($this -> router instanceof \SSFrame\Routers\iRouter){
             $this -> _frontController -> setRouter($this -> router);
-        }else if($this -> router == 'urlParser'){
-            $this -> _frontController -> setRouter(new \SSFrame\Routers\UrlRouter());
         }else{
-            $this -> _frontController -> setRouter(new \SSFrame\Routers\Route());
+
+            $this -> _frontController -> setRouter(new Route());
         }
 
         $this -> _frontController -> parseRouter();
@@ -64,7 +68,7 @@ class App {
 
     public static function getInstance() {
         if(!self::$_instance) {
-            self::$_instance = new \SSFrame\App();
+            self::$_instance = new App();
         }
 
         return self::$_instance;
