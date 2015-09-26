@@ -13,7 +13,7 @@ use \SSFrame\Routers\Route;
 
 $route = new Route();
 $route->addRoute('get', '/user/{id}', 'UsersController@show');
-$route->addRoute('get', '/msg/{id}', 'MessagesController@show');
+$route->addRoute('get', '/msg/{id}', 'MessagesController@send');
 
 
 $route->area(['name'=>'forum', 'prefix'=>'/supercoolforum'],

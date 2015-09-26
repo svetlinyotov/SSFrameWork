@@ -1,11 +1,18 @@
 <?php
 
-namespace Areas\Forum\Controllers;
+namespace App\Areas\Forum\Controllers;
+
+use SSFrame\View;
 
 class TopicsController
 {
     public function listTopics()
     {
-        echo "listed";
+        $view = View::getInstance();
+
+
+        $view->username = "cool";
+        $view->appendToLayout('body', 'admin.index');
+        $view->display('layouts.default', ['somevar' => 23432, 'someCoolVar' => [435, 435345, 435435]]);
     }
 }
