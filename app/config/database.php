@@ -2,7 +2,7 @@
 
 return [
     'default' => [
-        'connection_uri' => 'mysql:host=localhost;dbname=test',
+        'connection_uri' => 'mysql:host=localhost;dbname=test_1',
         'username' => 'svetlin',
         'password' => 'qwerty',
         'pdo_options' => [

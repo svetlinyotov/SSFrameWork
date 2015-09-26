@@ -35,26 +35,16 @@ class SimpleDB
      * @param array $pdoOptions
      * @return SimpleDB
      */
-    public function prepare($sql, $params = array(), $pdoOptions = array()) {
+    public function sql($sql, $params = array(), $pdoOptions = array()) {
         $this->stmt = $this->db->prepare($sql, $pdoOptions);
         $this->params = $params;
         $this->sql = $sql;
-        return $this;
-    }
 
-    /**
-     *
-     * @param array $params
-     * @return SimpleDB
-     */
-    public function execute($params = array()) {
-        if ($params) {
-            $this->params = $params;
-        }
         if($this->logSQL){
             //Logger::getInstance()->set($this->sql.' '.print_r($this->params, true), 'db');
         }
         $this->stmt->execute($this->params);
+
         return $this;
     }
 
