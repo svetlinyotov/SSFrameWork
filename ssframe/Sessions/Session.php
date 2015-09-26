@@ -7,7 +7,7 @@ use SSFrame\Config;
 
 class Session
 {
-    public static $_instance;
+    public static $_instance = null;
     private $_session = null;
 
     public function __construct() {
