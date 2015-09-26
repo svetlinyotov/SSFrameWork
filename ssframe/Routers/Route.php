@@ -17,14 +17,17 @@
 namespace SSFrame\Routers;
 
 
-class Route implements \SSFrame\Routers\RouterInterface {
+use SSFrame\Common;
+
+class Route implements RouterInterface {
 
     private static $rawRoutes = [];
-    protected $routesTree = null;
-    private static $allowedMethods = ['get', 'post', 'put', 'any'];
+    private $routesTree = null;
+    private $allowedMethods = ['get', 'post', 'put', 'any'];
     public $controller = null;
     public $method = null;
     public $params = array();
+    public $row = [];
 
     public function printRoute()
     {
@@ -40,10 +43,12 @@ class Route implements \SSFrame\Routers\RouterInterface {
      * @param bool $area
      * @return array
      */
-    public static function addRoute($method, $route, $action, $area = false)
+    public function addRoute($method, $route, $action, $area = false)
     {
         $method = (array)$method;
-        if (array_diff($method, self::$allowedMethods)) {
+        $action = config("app.controller_default_namespace") . "\\" . $action;
+
+        if (array_diff($method, $this->allowedMethods)) {
             //throw new \Exception('Method:' . $method . ' is not valid');
             $method = 'get';
         }
@@ -59,8 +64,8 @@ class Route implements \SSFrame\Routers\RouterInterface {
                 $methods[$v] = $action;
             }
         }
-            self::$rawRoutes[] = ['route' => $route, 'method' => $methods];
-
+            //$this->rawRoutes[] = ['route' => $route, 'method' => $methods];
+        array_push(self::$rawRoutes, ['route' => $route, 'method' => $methods]);
     }
 
     /**
@@ -87,6 +92,7 @@ class Route implements \SSFrame\Routers\RouterInterface {
         if ($this->routesTree == null) {
             $this->routesTree = $this->parseRoutes(self::$rawRoutes);
         }
+
         $search = $this->normalize($uri);
         $node = $this->routesTree;
         $params = [];
@@ -117,13 +123,11 @@ class Route implements \SSFrame\Routers\RouterInterface {
             if (!isset($node['exec']['method'][$method]) && !isset($node['exec']['method']['any'])) {
                 throw new \Exception('Method: ' . $method . ' is not allowed for this route');
             }
-            $this->controller = \SSFrame\Common::str_lreplace('Controller', '', explode("@", $node['exec']['method'][$method])[0]);
+            $this->controller = Common::str_lreplace('Controller', '', explode("@", $node['exec']['method'][$method])[0]);
             $this->method = explode("@", $node['exec']['method'][$method])[1];
             $this->params = $params;
-            $this->route = $this->routesTree;
         }
-        $this->rowRoutes = self::$rawRoutes;
-
+        $this->row = self::$rawRoutes;
 
         //throw new \Exception('Route for uri: ' . $uri . ' was not found');
     }
@@ -151,8 +155,6 @@ class Route implements \SSFrame\Routers\RouterInterface {
         if (mb_substr($route, -1, 1) == '/') {
             $route = substr($route, 0, -1);
         }
-        $route = str_replace("///", "/", $route);
-        $route = str_replace("//", "/", $route);
 
         $result = explode('/', $route);
         $result[0] = '/';
@@ -201,11 +203,8 @@ class Route implements \SSFrame\Routers\RouterInterface {
         return $tree;
     }
 
-    public static function match($method, $uri, $action){
-        self::addRoute($method, $uri,  config("app.controller_default_namespace") . "\\" . $action);
-    }
 
-    public static function area(Array $params, $routes)
+    public function area(Array $params, $routes)
     {
         $name = $params['name'];
         $prefix = $params['prefix'];
@@ -224,10 +223,8 @@ class Route implements \SSFrame\Routers\RouterInterface {
                     unset(self::$rawRoutes[$key]);
                 }
             }
-            self::addRoute($route[0], $_route, "Areas\\".ucfirst($name)."\\Controllers\\".$route[2]);
+            $this->addRoute($route[0], $_route, "Areas\\".ucfirst($name)."\\Controllers\\".$route[2]);
         }
 
-
-        //echo "<pre>".print_r(self::$rawRoutes, true)."</pre>";
     }
 }

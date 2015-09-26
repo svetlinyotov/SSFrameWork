@@ -63,11 +63,9 @@ class FrontController {
         $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
         $this->router->getURI($requestMethod);
 
-        $this->controller = $this->router->controller;
+        $this->controller = ucfirst($this->router->controller);
         $this->method = $this->router->method;
         $this->params = $this->router->params;
-
-        //echo "<pre>".print_r($this->router->route, true)."</pre>";
 
         if($this->controller == null){
             if(config("app.second_step_routing") === false) {
@@ -77,7 +75,7 @@ class FrontController {
             $this->setRouter(new UrlRouter());
             $this->parseRouter();
 
-            $this -> action = $this -> controller.'Controller@'.$this->method;
+            $this -> action = config("app.controller_default_namespace") . "\\" . $this -> controller.'Controller@'.$this->method;
             if($this->checkIfRouteDefined() == true){
                 throw new \Exception('Action '.$this->action.' already defined in a custom route');
             }
@@ -96,7 +94,7 @@ class FrontController {
         $_route = new Route();
         $_route->getURI();
 
-        foreach ($_route->rowRoutes as $route) {
+        foreach ($_route->row as $route) {
             if($this->action == array_values($route['method'])[0]){
                 return true;
             }
