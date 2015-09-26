@@ -74,8 +74,20 @@ class Config {
             }
 
             return $this->configArray[basename($file)][$key];
+        }else{
+            $confInternalUrl = implode(DIRECTORY_SEPARATOR, $params);
+            $file = $this->configPath . DIRECTORY_SEPARATOR . $confInternalUrl . ".php";
+
+            if(!isset($this->configArray[basename($file)])){
+                $this->includeConfigFile($file);
+            }
+
+            if(!isset($this->configArray[basename($file)])){
+                $this->configArray[basename($file)] = 0;
+            }
+
+            return $this->configArray[basename($file)];
         }
-        return null;
     }
 
     public static function getInstance() {
