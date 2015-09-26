@@ -19,6 +19,8 @@ namespace SSFrame;
 include_once "Loader.php";
 
 use SSFrame\Routers\Route;
+use SSFrame\Sessions\ISession;
+use SSFrame\Sessions\NativeSession;
 
 class App {
 
@@ -26,6 +28,7 @@ class App {
     private $_frontController = null;
     private $router = null;
     private $_dbConnections = array();
+    private $_session = null;
 
     private function __construct() {
         Loader::envParser();
@@ -55,8 +58,29 @@ class App {
             $this -> _frontController -> setRouter(new Route());
         }
 
+        $_session = Config::getInstance()->get('session');
+        if ($_session['autostart']) {
+            if ($_session['type'] == 'native') {
+                $_s = new NativeSession($_session['name'], $_session['lifetime'], $_session['path'], $_session['domain'], $_session['secure']);
+            } else if ($_session['type'] == 'database') {
+                $_s = new \GF\Session\DBSession($_session['dbConnection'],
+                    $_session['name'], $_session['dbTable'], $_session['lifetime'], $_session['path'], $_session['domain'], $_session['secure']);
+            } else {
+                throw new \Exception('No valid session', 500);
+            }
+            $this->setSession($_s);
+        }
+
         $this -> _frontController -> parseRouter();
 
+    }
+
+    public function setSession(ISession $session) {
+        $this->_session = $session;
+    }
+
+    public function getSession() {
+        return $this->_session;
     }
 
     public function getDBConnection($connection = 'default') {

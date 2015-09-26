@@ -7,8 +7,6 @@ include_once '../ssframe/App.php';
 
 $app = \SSFrame\App::getInstance();
 
-$app->getDBConnection();
-
 function env($param) {
     return \SSFrame\Loader::env($param);
 }
@@ -17,3 +15,6 @@ function config($param) {
 }
 
 $app->run();
+
+$app->getSession()->counter+=1;
+echo $app->getSession()->counter;
