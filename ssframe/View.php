@@ -15,10 +15,16 @@ class View
 
     private function __construct() {
 
-        $this->viewPath = null;//Config::getInstance()->get('viewsDirectory');
+
+        $current_controller = FrontController::getInstance()->getRouter()->controller.'Controller';
+        $reflection = new \ReflectionClass($current_controller);
+        $view_path = strtolower($reflection->getNamespaceName())."/../views";
+
+        $this->viewPath = realpath(config("app.namespaces")["App"].'/../'.$view_path);
         if ($this->viewPath == null) {
             $this->viewPath = realpath('../app/views/');
         }
+
     }
 
     public function setViewDirectory($path) {
