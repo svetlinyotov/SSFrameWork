@@ -1,19 +1,8 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of DBSession
- *
- * @author gatakka
- */
-namespace GF\Session;
+namespace SSFrame\Sessions;
 
 use SSFrame\DB\SimpleDB;
-use SSFrame\Sessions\ISession;
 
 class DBSession extends SimpleDB implements ISession{
     
@@ -46,16 +35,15 @@ class DBSession extends SimpleDB implements ISession{
     }
 
     private function _startNewSession() {
-        $this->sessionId = md5(uniqid('gf', TRUE));
-        $this->prepare('INSERT INTO ' . $this->tableName . ' (sessid,valid_until) VALUES(?,?)',
-                array($this->sessionId, (time() + $this->lifetime)))->execute();
+        $this->sessionId = md5(uniqid('SSFrame', TRUE));
+        $this->sql('INSERT INTO ' . $this->tableName . ' (sessid,valid_until) VALUES(?,?)', [$this->sessionId, (time() + $this->lifetime)]);
         setcookie($this->sessionName, $this->sessionId, (time() + $this->lifetime), $this->path, $this->domain, $this->secure, true);
     }
     
     private function _validateSession() {
         if ($this->sessionId) {
-            $d = $this->prepare('SELECT * FROM ' . $this->tableName . ' WHERE sessid=? AND valid_until<=?', 
-                    array($this->sessionId, (time() + $this->lifetime)))->execute()->fetchAllAssoc();
+            $d = $this->sql('SELECT * FROM ' . $this->tableName . ' WHERE sessid=? AND valid_until<=?', [$this->sessionId, (time() + $this->lifetime)])->fetchAllAssoc();
+
             if (is_array($d) && count($d) == 1 && $d[0]) {
                 $this->sessionData = unserialize($d[0]['sess_data']);
                 return true;
@@ -72,9 +60,14 @@ class DBSession extends SimpleDB implements ISession{
         $this->sessionData[$name] = $value;        
     }
 
+    public function unsetKey($name)
+    {
+        unset($this->sessionData[$name]);
+    }
+
     public function destroySession() {
         if ($this->sessionId) {
-            $this->prepare('DELETE FROM ' . $this->tableName . ' WHERE sessid=?', array($this->sessionId))->execute();
+            $this->sql('DELETE FROM ' . $this->tableName . ' WHERE sessid=?', array($this->sessionId));
         }
     }
 
@@ -84,14 +77,13 @@ class DBSession extends SimpleDB implements ISession{
 
     public function saveSession() {        
          if ($this->sessionId) {
-            $this->prepare('UPDATE ' . $this->tableName . ' SET sess_data=?,valid_until=? WHERE sessid=?', 
-                    array(serialize($this->sessionData), (time() + $this->lifetime), $this->sessionId))->execute();
+            $this->sql('UPDATE ' . $this->tableName . ' SET sess_data=?,valid_until=? WHERE sessid=?',[serialize($this->sessionData), (time() + $this->lifetime), $this->sessionId]);
             setcookie($this->sessionName, $this->sessionId, (time() + $this->lifetime), $this->path, $this->domain, $this->secure, true);
         }
     }
     
     private function _gc() {
-        $this->prepare('DELETE FROM `' . $this->tableName . '` WHERE valid_until<?', array(time()))->execute();
+        $this->sql('DELETE FROM ' . $this->tableName . ' WHERE valid_until<?', array(time()));
     }
 }
 

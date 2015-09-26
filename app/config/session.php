@@ -1,11 +1,12 @@
 <?php
 
 return [
+
     'autostart' => true,
 
-    'type' => 'native',
+    'type' => 'database', //native, database
 
-    'name' => '_sess',
+    'name' => '_SSFrame',
 
     'lifetime' => 3600,
 
@@ -14,4 +15,8 @@ return [
     'domain' => '',
 
     'secure' => false,
+
+    'dbConnection' => 'default',
+
+    'dbTable' => 'sessions',
 ];

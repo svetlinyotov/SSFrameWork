@@ -18,10 +18,8 @@ namespace SSFrame;
 
 include_once "Loader.php";
 
-use GF\Session\DBSession;
 use SSFrame\Routers\Route;
-use SSFrame\Sessions\ISession;
-use SSFrame\Sessions\NativeSession;
+use SSFrame\Sessions\Session;
 
 class App {
 
@@ -59,29 +57,10 @@ class App {
             $this -> _frontController -> setRouter(new Route());
         }
 
-        $_session = Config::getInstance()->get('session');
-        if ($_session['autostart']) {
-            if ($_session['type'] == 'native') {
-                $_s = new NativeSession($_session['name'], $_session['lifetime'], $_session['path'], $_session['domain'], $_session['secure']);
-            } else if ($_session['type'] == 'database') {
-                $_s = new DBSession($_session['dbConnection'],
-                    $_session['name'], $_session['dbTable'], $_session['lifetime'], $_session['path'], $_session['domain'], $_session['secure']);
-            } else {
-                throw new \Exception('No valid session', 500);
-            }
-            $this->setSession($_s);
-        }
+
 
         $this -> _frontController -> parseRouter();
 
-    }
-
-    public function setSession(ISession $session) {
-        $this->_session = $session;
-    }
-
-    public function getSession() {
-        return $this->_session;
     }
 
     public function getDBConnection($connection = 'default') {
@@ -111,5 +90,10 @@ class App {
         return self::$_instance;
     }
 
+    public function __destruct() {
+        if (Session::getInstance()->getSession() != null) {
+            Session::getInstance()->getSession()->saveSession();
+        }
+    }
 
 }
