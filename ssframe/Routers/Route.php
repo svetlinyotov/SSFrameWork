@@ -46,7 +46,9 @@ class Route implements RouterInterface {
     public function addRoute($method, $route, $action, $area = false)
     {
         $method = (array)$method;
-        $action = config("app.controller_default_namespace") . "\\" . $action;
+        if(!$area) {
+            $action = config("app.controller_default_namespace") . "\\controllers\\" . $action;
+        }
 
         if (array_diff($method, $this->allowedMethods)) {
             //throw new \Exception('Method:' . $method . ' is not valid');
@@ -54,7 +56,7 @@ class Route implements RouterInterface {
         }
 
         if($area != false) {
-            $action = $area."\\".$action;
+            //$action = $area."\\".$action;
         }
         $methods = [];
         if (array_search('any', $method) !== false) {
@@ -223,7 +225,8 @@ class Route implements RouterInterface {
                     unset(self::$rawRoutes[$key]);
                 }
             }
-            $this->addRoute($route[0], $_route, "Areas\\".ucfirst($name)."\\Controllers\\".$route[2]);
+
+            $this->addRoute($route[0], $_route, config("app.controller_default_namespace") . "\\Areas\\".ucfirst($name)."\\controllers\\".$route[2], true);
         }
 
     }

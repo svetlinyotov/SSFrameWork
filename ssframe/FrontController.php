@@ -75,7 +75,8 @@ class FrontController {
             $this->setRouter(new UrlRouter());
             $this->parseRouter();
 
-            $this -> action = config("app.controller_default_namespace") . "\\" . $this -> controller.'Controller@'.$this->method;
+            $this -> action = $this -> controller.'Controller@'.$this->method;
+
             if($this->checkIfRouteDefined() == true){
                 throw new \Exception('Action '.$this->action.' already defined in a custom route');
             }

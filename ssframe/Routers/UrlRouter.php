@@ -28,7 +28,7 @@ class UrlRouter implements \SSFrame\Routers\RouterInterface {
         $data = explode('/', $uri);
 
         if($data[0]){
-            $this->controller = config("app.controller_default_namespace") . "\\" . $data[0];
+            $this->controller = config("app.controller_default_namespace") . "\\controllers\\" . ucfirst($data[0]);
             unset($data[0]);
         }
         if($data[1]){

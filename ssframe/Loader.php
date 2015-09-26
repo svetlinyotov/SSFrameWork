@@ -36,7 +36,7 @@ final class Loader {
                 $_path = $path.$_path.".php";
 
                 if(file_exists($_path)) {
-                    include "$_path";
+                    include_once "$_path";
                 }
             }
         }
