@@ -19,8 +19,8 @@ namespace SSFrame;
 class Config {
 
     private static $_instance = null;
-    public static $configPath = null;
-    public static $configArray = array();
+    public $configPath = null;
+    public $configArray = array();
 
     private function __construct() {
 
@@ -33,11 +33,11 @@ class Config {
             throw new \Exception('Config folder missing', 400);
         }
         if($_path && is_readable($_path) && is_dir($_path)) {
-            self::$configPath = $_path;
+            $this->configPath = $_path;
         }
     }
 
-    public static function includeConfigFile($path) {
+    public function includeConfigFile($path) {
         if(!$path) {
             throw new \Exception('Invalid config file path', 400);
         }
@@ -45,12 +45,12 @@ class Config {
         $_path = realpath($path);
         if($_path && is_file($_path) && is_readable($_path)){
             $config = include "$_path";
-            self::$configArray[basename($_path)] = $config;
+            $this->configArray[basename($_path)] = $config;
         }
     }
 
-    public static function get($data) {
-        if(self::$configPath == null) {
+    public function get($data) {
+        if($this->configPath == null) {
             throw new \Exception('Config folder path not specified', 400);
         }
         if(!$data) {
@@ -63,18 +63,19 @@ class Config {
         if(count($params) >= 2) {
             $key = array_pop($params);
             $confInternalUrl = implode(DIRECTORY_SEPARATOR, $params);
-            $file = self::$configPath . DIRECTORY_SEPARATOR . $confInternalUrl . ".php";
+            $file = $this->configPath . DIRECTORY_SEPARATOR . $confInternalUrl . ".php";
 
-            if(!isset(self::$configArray[basename($file)])){
-                self::includeConfigFile($file);
+            if(!isset($this->configArray[basename($file)])){
+                $this->includeConfigFile($file);
             }
 
-            if(!isset(self::$configArray[basename($file)][$key])){
-                self::$configArray[basename($file)][$key] = 0;
+            if(!isset($this->configArray[basename($file)][$key])){
+                $this->configArray[basename($file)][$key] = 0;
             }
 
-            return self::$configArray[basename($file)][$key];
+            return $this->configArray[basename($file)][$key];
         }
+        return null;
     }
 
     public static function getInstance() {

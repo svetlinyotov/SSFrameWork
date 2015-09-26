@@ -7,11 +7,13 @@ include_once '../ssframe/App.php';
 
 $app = \SSFrame\App::getInstance();
 
+$app->getDBConnection();
+
 function env($param) {
     return \SSFrame\Loader::env($param);
 }
 function config($param) {
-    return \SSFrame\Config::get($param);
+    return \SSFrame\Config::getInstance()->get($param);
 }
 
 $app->run();
