@@ -18,6 +18,7 @@ namespace SSFrame;
 
 include_once "Loader.php";
 
+use GF\Session\DBSession;
 use SSFrame\Routers\Route;
 use SSFrame\Sessions\ISession;
 use SSFrame\Sessions\NativeSession;
@@ -63,7 +64,7 @@ class App {
             if ($_session['type'] == 'native') {
                 $_s = new NativeSession($_session['name'], $_session['lifetime'], $_session['path'], $_session['domain'], $_session['secure']);
             } else if ($_session['type'] == 'database') {
-                $_s = new \GF\Session\DBSession($_session['dbConnection'],
+                $_s = new DBSession($_session['dbConnection'],
                     $_session['name'], $_session['dbTable'], $_session['lifetime'], $_session['path'], $_session['domain'], $_session['secure']);
             } else {
                 throw new \Exception('No valid session', 500);
