@@ -16,6 +16,7 @@
 
 namespace SSFrame;
 
+use App\Bindings\UserBindingModel;
 use ReflectionMethod;
 use SSFrame\Routers\Route;
 use SSFrame\Routers\RouterInterface;
@@ -126,13 +127,28 @@ class FrontController {
 
         $method = new ReflectionMethod($newController, $this -> method);
         $number_of_params_expected = $method->getNumberOfParameters();
+        $unbindModels = [];
+
+        if (preg_match_all('/@param\s+([^\s]+)/', $method->getDocComment(), $matches)) {
+            foreach ($matches[1] as $param) {
+                if(substr($param, -12) == "BindingModel"){
+                    array_push($unbindModels, $param);
+                }
+            }
+        }
 
         if(count($this->params) < $number_of_params_expected){
             $difference = $number_of_params_expected - count($this->params);
+
             for($i = 1; $i <= $difference; $i++){
-                $this->params[] = null;
+                if(isset($unbindModels[$i-1])) {
+                    $this->params[] = new $unbindModels[$i-1]();
+                }else{
+                    $this->params[] = null;
+                }
             }
         }
+
         call_user_func_array(array($newController, $this -> method), $this->params);
     }
 

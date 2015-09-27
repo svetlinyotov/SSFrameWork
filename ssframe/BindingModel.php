@@ -3,8 +3,6 @@
 namespace SSFrame;
 
 
-use App\Bindings\UserBindingModel;
-
 class BindingModel extends InputData
 {
     public function __construct()
