@@ -3,6 +3,8 @@
 namespace SSFrame;
 
 
+use SSFrame\Sessions\Session;
+
 class View
 {
     private static $_instance = null;
@@ -93,7 +95,7 @@ class View
             throw new \Exception('View ' . $file . ' cannot be included', 500);
         }
     }
-    public static function getFileDocBlock($file)
+    private static function getFileDocBlock($file)
     {
         $docComments = array_filter(
             token_get_all( file_get_contents( $file ) ), function($entry) {
@@ -104,10 +106,13 @@ class View
         return $fileDocComment[1];
     }
 
-    static function includeFileScope($____filePath, $__data) {
+    private function includeFileScope($____filePath, $__data) {
         ob_start();
         $__data = (array)$__data;
         extract($__data, EXTR_OVERWRITE);
+        $errors = Session::getInstance()->getSession()->withErrors;
+        $success = Session::getInstance()->getSession()->withSuccess;
+        $input = Session::getInstance()->getSession()->withInput;
         unset($__data);
         include $____filePath;
         $clean = ob_get_clean();
