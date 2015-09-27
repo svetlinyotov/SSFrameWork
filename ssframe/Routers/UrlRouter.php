@@ -42,6 +42,8 @@ class UrlRouter implements \SSFrame\Routers\RouterInterface {
     }
 
 
-
-
+    public function getPost()
+    {
+        return $_POST;
+    }
 }

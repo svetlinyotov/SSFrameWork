@@ -205,6 +205,11 @@ class Route implements RouterInterface {
         return $tree;
     }
 
+    public function getPost()
+    {
+        return $_POST;
+    }
+
 
     public function area(Array $params, $routes)
     {

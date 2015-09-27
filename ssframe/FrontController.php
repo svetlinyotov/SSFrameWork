@@ -24,6 +24,9 @@ use SSFrame\Routers\UrlRouter;
 class FrontController {
 
     private static $_instance = null;
+    /*
+     * @var \SSFrame\Routers\RouterInterface;
+     */
     private $router = null;
     private $declaredActions = [];
     public $controller = null;
@@ -104,8 +107,13 @@ class FrontController {
         return false;
     }
 
+    /**
+     * @throws \Exception
+     */
     private function loadRoute(){
         $file = $this -> controller.'Controller';
+        $input = InputData::getInstance();
+        $input->setPost($this->router->getPost());
 
         if(!class_exists($file)) {
             throw new \Exception('Class '.$file.' not found.');

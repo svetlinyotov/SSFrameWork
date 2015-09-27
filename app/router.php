@@ -18,7 +18,7 @@ $route->addRoute('get', '/msg/{id}', 'MessagesController@send');
 
 $route->area(['name'=>'forum', 'prefix'=>'/supercoolforum'],
     [
-        ['get', '/topics', 'TopicsController@listTopics'],
+        ['post', '/topics/{id}', 'TopicsController@listTopics'],
         ['get', '/topics/add', 'TopicsController@create'],
         ['get', '/answers', 'AnswersController@list']
     ]

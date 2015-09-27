@@ -20,4 +20,6 @@ namespace SSFrame\Routers;
 interface RouterInterface {
     public function getURI();
 
+    public function getPost();
+
 }
