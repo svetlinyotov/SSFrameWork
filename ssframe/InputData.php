@@ -54,13 +54,18 @@ class InputData
     }
 
     public function post($name, $normalize = null, $default = null) {
-        if ($this->hasPost($name)) {
+        if ($this->hasPost($name) && $_POST[$name] != "") {
             if ($normalize != null) {
                 return Common::normalize($this->_post[$name], $normalize);
             }
             return $this->_post[$name];
         }
         return $default;
+    }
+
+    public function postAll()
+    {
+        return $this->_post;
     }
 
     public function cookies($name, $normalize = null, $default = null) {
