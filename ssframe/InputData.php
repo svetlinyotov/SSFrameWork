@@ -19,6 +19,7 @@ class InputData
         if (is_array($ar)) {
             $this->_post = $ar;
         }
+        array_walk_recursive($this->_post, [Common::class, 'filter']);
     }
 
     public function setGet($ar)
@@ -26,6 +27,7 @@ class InputData
         if (is_array($ar)) {
             $this->_get = $ar;
         }
+        array_walk_recursive($this->_get, [Common::class, 'filter']);
     }
 
     public function hasGet($id)

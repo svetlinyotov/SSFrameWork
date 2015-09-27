@@ -143,4 +143,8 @@ class Common
 
         return $subject;
     }
+
+    public static function filter(&$value) {
+        $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    }
 }
