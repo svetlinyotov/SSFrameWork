@@ -84,19 +84,46 @@ class View
             //extract($this->data, EXTR_OVERWRITE);
             //include $fl;
             //return ob_get_clean();
+
             return self::includeFileScope($fl, $this->data);
         } else {
             throw new \Exception('View ' . $file . ' cannot be included', 500);
         }
     }
+    public static function getFileDocBlock($file)
+    {
+        $docComments = array_filter(
+            token_get_all( file_get_contents( $file ) ), function($entry) {
+            return $entry[0] == T_DOC_COMMENT;
+        }
+        );
+        $fileDocComment = array_shift( $docComments );
+        return $fileDocComment[1];
+    }
 
-    static function includeFileScope($____filePath, $data) {
+    static function includeFileScope($____filePath, $__data) {
         ob_start();
-        $data = (array)$data;
-        extract($data, EXTR_OVERWRITE);
-        unset($data);
+        $__data = (array)$__data;
+        extract($__data, EXTR_OVERWRITE);
+        unset($__data);
         include $____filePath;
-        return ob_get_clean();
+        $clean = ob_get_clean();
+
+        $doc = self::getFileDocBlock($____filePath);
+        if($doc != null) {
+            preg_match_all('/\\@var\\s+((\\\\[A-Za-z0-9]+)+)\\s+\\$([A-Za-z0-9_]+)/', $doc, $matches);
+            //echo "<pre>" . print_r($matches, true) . "</pre><br>";
+
+            foreach ($matches[3] as $k => $var) {
+                $vars = $$var;
+                $namespace = ltrim($matches[1][$k], '\\');
+                $returned = gettype($vars);
+                if ($vars != $namespace) {
+                    throw new \Exception("Given object type must be {$namespace}, instead given {$returned}", 400);
+                }
+            }
+        }
+        return $clean;
     }
 
     public function __set($name, $value) {
