@@ -14,6 +14,9 @@ class View
     private $extension = '.php';
     private $layoutParts = array();
     private $layoutData = array();
+    private $errors;
+    private $success;
+    private $input;
 
     private function __construct() {
 
@@ -26,9 +29,14 @@ class View
 
             $this->viewPath = realpath(config("app.namespaces")["App"] . '/../' . $view_path);
         }
-        if (!is_dir($this->viewPath)) {
 
-        }
+        $this->errors = Session::getInstance()->getSession()->withErrors;
+        $this->success = Session::getInstance()->getSession()->withSuccess;
+        $this->input = Session::getInstance()->getSession()->withInput;
+
+        Session::getInstance()->getSession()->unsetKey('withErrors');
+        Session::getInstance()->getSession()->unsetKey('withSuccess');
+        Session::getInstance()->getSession()->unsetKey('withInput');
     }
 
     public function setViewDirectory($path) {
@@ -110,11 +118,12 @@ class View
         ob_start();
         $__data = (array)$__data;
         extract($__data, EXTR_OVERWRITE);
-        $errors = Session::getInstance()->getSession()->withErrors;
-        $success = Session::getInstance()->getSession()->withSuccess;
-        $input = Session::getInstance()->getSession()->withInput;
         unset($__data);
+        $errors = $this->errors;
+        $success = $this->success;
+        $input = $this->input;
         include $____filePath;
+
         $clean = ob_get_clean();
 
         $doc = self::getFileDocBlock($____filePath);

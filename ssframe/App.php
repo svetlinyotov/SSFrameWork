@@ -18,6 +18,7 @@ namespace SSFrame;
 
 include_once "Loader.php";
 
+use SSFrame\Facades\Auth;
 use SSFrame\Routers\Route;
 use SSFrame\Sessions\Session;
 
@@ -51,6 +52,7 @@ class App {
     public function run() {
 
         CSRF::getInstance()->generate();
+        Auth::doAuth();
         $this -> _frontController = FrontController::getInstance();
 
         if($this -> router instanceof \SSFrame\Routers\iRouter){
@@ -116,7 +118,7 @@ class App {
     }
 
     public function __destruct() {
-        if (Session::getInstance()->getSession() != null) {
+        if (Session::getInstance()->getSession() != null && !headers_sent()) {
             Session::getInstance()->getSession()->saveSession();
         }
     }
