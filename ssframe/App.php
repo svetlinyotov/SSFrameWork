@@ -30,6 +30,7 @@ class App {
     private $_session = null;
 
     private function __construct() {
+        set_exception_handler([$this, '_exceptionHandler']);
         Loader::envParser();
         Loader::registerNamespace('SSFrame', dirname(__DIR__).'/SSFrame');
         Loader::registerAutoLoad();
@@ -88,6 +89,27 @@ class App {
         }
 
         return self::$_instance;
+    }
+
+    public function _exceptionHandler(\Exception $ex) {
+        if (config('app.displayExceptions') == true) {
+            echo '<pre>' . print_r($ex,true) . '</pre>';
+        } else {
+            $this->displayError($ex->getCode());
+        }
+    }
+
+    public function displayError($error) {
+        if($error == 0) $error = 500;
+        try {
+            $view = View::getInstance();
+            $view->display('errors.' . $error);
+        } catch (\Exception $exc) {
+            Common::headerStatus($error);
+            echo '<h1>View errors.' . $error . ' not found</h1>';
+            exit;
+        }
+
     }
 
     public function __destruct() {

@@ -129,7 +129,7 @@ class Common
         if (!$codes[$code]) {
             $code = 500;
         }
-        header($_SERVER['SERVER_PROTOCOL'] . ' ' . $statusCode . ' ' . $codes[$code], true, $code);
+        header($_SERVER['SERVER_PROTOCOL'] . ' ' . $code . ' ' . $codes[$code], true, $code);
     }
 
     public static function str_lreplace($search, $replace, $subject)
