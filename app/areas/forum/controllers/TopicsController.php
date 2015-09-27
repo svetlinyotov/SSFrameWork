@@ -5,6 +5,7 @@ namespace App\Areas\Forum\Controllers;
 use App\Areas\Forum\Models\Answers;
 use App\Areas\Forum\Models\Topics;
 use App\Bindings\UserBindingModel;
+use SSFrame\Auth;
 use SSFrame\BindingModel;
 use SSFrame\InputData;
 use SSFrame\View;
@@ -14,12 +15,13 @@ class TopicsController
 
     public function listTopics($someId )
     {
-        /*
-        var_dump($m);
-        $g = new BindingModel();
-        echo "<pre>".print_r($g, true)."</pre>";
-        echo "<br>".$g->age;
-        */
+        //$auth = Auth::getInstance();
+        //echo "<pre>".print_r($auth->make('sis', 'test', true), true)."</pre>";
+        //echo "<pre>".print_r($auth->user())."</pre>";
+
+        $g = new UserBindingModel();
+        echo "<pre>".print_r($g->getName(), true)."</pre>";
+
         $view = View::getInstance();
 
         $view->username = InputData::getInstance()->post('name', 'string', 'nqma_ime').$someId;

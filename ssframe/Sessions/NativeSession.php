@@ -32,6 +32,11 @@ class NativeSession implements ISession
         session_destroy();
     }
 
+    public function unsetKey($name)
+    {
+        unset($_SESSION[$name]);
+    }
+
     public function getSessionId() {
         return session_id();
     }

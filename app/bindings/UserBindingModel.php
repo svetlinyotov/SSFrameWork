@@ -7,9 +7,6 @@ use SSFrame\BindingModel;
 
 class UserBindingModel extends BindingModel
 {
-    public function __construct(){
-
-    }
     public $name;
     public $age;
     public $other;
