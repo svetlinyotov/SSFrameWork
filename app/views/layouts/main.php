@@ -1,4 +1,4 @@
-<?php use \SSFrame\Facades\View; ?>
+<?php use SSFrame\Facades\Auth; use SSFrame\Facades\View; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -50,16 +50,21 @@
                 <li>
                     <a href="<?=asset('/contact');?>">Contact us</a>
                 </li>
-                <li>
-                    <a href="<?=asset('/login');?>">Login</a>
-                </li>
+                <?php if(Auth::user() == false) { ?>
+                    <li>
+                        <a href="<?=asset('/login');?>">Login</a>
+                    </li>
+                <?php }else{ ?>
+                    <li>
+                        <a href="<?=asset('/logout');?>">Logout</a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     </div>-->
 </nav>
 
 <div class="container">
-
     <?=View::getLayoutData('body');?>
 
 </div>

@@ -3,6 +3,7 @@
 namespace SSFrame;
 
 use SSFrame\DB\SimpleDB;
+use SSFrame\Facades\Redirect;
 use SSFrame\Sessions\Session;
 
 class Auth extends SimpleDB
@@ -19,17 +20,16 @@ class Auth extends SimpleDB
         parent::__construct();
     }
 
-    public function make($username, $password, $remember = false)
+    public function make($email, $password, $remember = false)
     {
 
-        $user = $this->sql("SELECT * FROM users WHERE username = ? AND password = ?", [$username, $password]);
+        $user = $this->sql("SELECT * FROM users WHERE email = ? AND password = ?", [$email, $password]);
 
         if($user->getAffectedRows() == 1){
             $token = Common::generateToken();
             Session::getInstance()->getSession()->user_token=$token;
-            $this->_user = $user->fetchRowAssoc();
 
-            $this->sql("UPDATE users SET access_token= ? WHERE id = ?", [$token, $this->_user['id']]);
+            $this->sql("UPDATE users SET access_token= ? WHERE id = ?", [$token, $user->fetchRowAssoc()['id']]);
 
             return true;
         }
@@ -38,16 +38,33 @@ class Auth extends SimpleDB
 
     }
 
+    public function doAuth(){
+        $current_token = Session::getInstance()->getSession()->user_token;
+        if(is_string($current_token)){
+            $user = $this->sql("SELECT * FROM users WHERE access_token = ?", [$current_token]);
+
+            if($user->getAffectedRows() == 1) {
+                $this->_user = $user->fetchRowAssoc();
+                return $this->_user;
+
+            }
+        }
+        return null;
+    }
+
     public function logout()
     {
         $this->sql("UPDATE users SET access_token= '' WHERE id = ?", [ $this->user()->id]);
         Session::getInstance()->getSession()->unsetKey('user_token');
-
+        Redirect::to('/home')->go();
     }
 
     public function user()
     {
-        return (object)$this->_user;
+        if(count($this->_user) > 0) {
+            return (object)$this->_user;
+        }
+        return false;
     }
 
     public static function getInstance()

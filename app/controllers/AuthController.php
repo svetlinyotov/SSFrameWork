@@ -9,8 +9,11 @@ use SSFrame\Facades\Redirect;
 use SSFrame\Facades\Validation;
 use SSFrame\Facades\View;
 
-class AuthController
+class AuthController extends \SSFrame\Auth
 {
+    /**
+     * @UnAuthorized
+     */
     public function index()
     {
         View::appendToLayout('body', "auth.login");
@@ -19,6 +22,7 @@ class AuthController
 
     /**
      * @param \App\Bindings\AuthLoginBindingModel $user
+     * @UnAuthorized
      */
     public function authorize(AuthLoginBindingModel $user)
     {
@@ -27,8 +31,13 @@ class AuthController
             'password' => 'required|min:5'
         ]);
 
-        if(Validation::getErrors() === false){
-            Auth::make($user->getEmail(), $user->getEmail(), $user->remember);
+
+        if(Validation::getErrors() == false){
+            if(!Auth::make($user->email, $user->password, $user->remember)){;
+                Redirect::to('/login')->withErrors(['User does not exist'])->withInput(['email'=>$user->email])->go();
+            }
+            Redirect::to('/login')->go();
+
         }else{
             Redirect::to('/login')->withErrors(Validation::getErrors())->withInput(['email'=>$user->email])->go();
         }

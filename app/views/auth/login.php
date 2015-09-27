@@ -1,6 +1,16 @@
 <?php use \SSFrame\Form; ?>
-<?=var_dump($errors);?>
-<?=var_dump($success);?>
+<br>
+<?php if($errors) { ?>
+<div class="alert alert-danger">
+    <?php
+        foreach ($errors as $error) {
+            echo "$error <br>";
+        }
+    ?>
+</div>
+<?php } ?>
+
+
 <div class="row">
     <div class="container" style="margin-top:30px">
         <div class="col-md-4 col-lg-offset-4">
