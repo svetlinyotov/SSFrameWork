@@ -42,6 +42,12 @@ class Form
         echo "<input type=\"hidden\" name=\"$name\" $params_list value=\"$value\">\n";
     }
 
+    public static function csrf()
+    {
+        $token = CSRF::getInstance()->token();
+        echo "<input type=\"hidden\" name=\"csrf_token\" value=\"$token\">\n";
+    }
+
     public static function textarea($name, $value=null, Array $params=[])
     {
         $name = self::normalize($name);
