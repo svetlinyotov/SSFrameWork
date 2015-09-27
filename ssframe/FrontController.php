@@ -127,6 +127,7 @@ class FrontController {
 
         $method = new ReflectionMethod($newController, $this -> method);
         $number_of_params_expected = $method->getNumberOfParameters();
+        $annotations = $method->getDocComment();
         $unbindModels = [];
 
         if (preg_match_all('/@param\s+([^\s]+)/', $method->getDocComment(), $matches)) {
@@ -148,6 +149,8 @@ class FrontController {
                 }
             }
         }
+
+        Annotations::getInstance($annotations);
 
         call_user_func_array(array($newController, $this -> method), $this->params);
     }
