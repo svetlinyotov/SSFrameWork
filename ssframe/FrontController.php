@@ -117,10 +117,10 @@ class FrontController {
         $input->setPost($this->router->getPost());
 
         if(!class_exists($file)) {
-            throw new \Exception('Class '.$file.' not found.');
+            throw new \Exception('Class '.$file.' not found.', 404);
         }
         if(!method_exists($file, $this->method)){
-            throw new \Exception('Method '.$this->method.' not found in class '.$file.'.');
+            throw new \Exception('Method '.$this->method.' not found in class '.$file.'.', 404);
         }
 
         $newController = new $file();

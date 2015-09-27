@@ -15,16 +15,18 @@ class View
 
     private function __construct() {
 
+        $this->viewPath = realpath(config("app.views_default_path"));
 
         $current_controller = FrontController::getInstance()->getRouter()->controller.'Controller';
-        $reflection = new \ReflectionClass($current_controller);
-        $view_path = strtolower($reflection->getNamespaceName())."/../views";
+        if(class_exists($current_controller)) {
+            $reflection = new \ReflectionClass($current_controller);
+            $view_path = strtolower($reflection->getNamespaceName()) . "/../views";
 
-        $this->viewPath = realpath(config("app.namespaces")["App"].'/../'.$view_path);
-        if ($this->viewPath == null) {
-            $this->viewPath = realpath('../app/views/');
+            $this->viewPath = realpath(config("app.namespaces")["App"] . '/../' . $view_path);
         }
+        if (!is_dir($this->viewPath)) {
 
+        }
     }
 
     public function setViewDirectory($path) {
@@ -78,6 +80,7 @@ class View
         if ($this->viewDir == null) {
             $this->setViewDirectory($this->viewPath);
         }
+
         $fl = $this->viewDir . str_replace('.', DIRECTORY_SEPARATOR, $file) . $this->extension;
         if (file_exists($fl) && is_readable($fl)) {
             //ob_start();
