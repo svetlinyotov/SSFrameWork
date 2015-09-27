@@ -5,6 +5,7 @@ namespace SSFrame;
 
 class Validation
 {
+    public static $_instance = null;
     private $_rules = array();
     private $_errors = array();
 
@@ -43,6 +44,7 @@ class Validation
                 }
             }
         }
+        //return $this->_errors;
         return (bool) !count($this->_errors);
     }
 
@@ -52,6 +54,14 @@ class Validation
 
     public function __call($a, $b) {
         throw new \Exception('Invalid validation rule', 500);
+    }
+
+    public static function getInstance()
+    {
+        if (self::$_instance == null) {
+            self::$_instance = new Validation();
+        }
+        return self::$_instance;
     }
 
     public static function required($val) {
@@ -78,15 +88,15 @@ class Validation
         return $val1 !== $val2;
     }
 
-    public static function minLength($val1, $val2) {
+    public static function min($val1, $val2) {
         return (mb_strlen($val1) >= $val2);
     }
 
-    public static function maxLength($val1, $val2) {
+    public static function max($val1, $val2) {
         return (mb_strlen($val1) <= $val2);
     }
 
-    public static function exactLength($val1, $val2) {
+    public static function eq($val1, $val2) {
         return (mb_strlen($val1) == $val2);
     }
 

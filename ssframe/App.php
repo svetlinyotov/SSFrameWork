@@ -49,6 +49,8 @@ class App {
 
 
     public function run() {
+
+        CSRF::getInstance()->generate();
         $this -> _frontController = FrontController::getInstance();
 
         if($this -> router instanceof \SSFrame\Routers\iRouter){
@@ -62,6 +64,7 @@ class App {
 
         $this -> _frontController -> parseRouter();
 
+        CSRF::getInstance()->check();
     }
 
     public function getDBConnection($connection = 'default') {
