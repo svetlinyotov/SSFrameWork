@@ -12,8 +12,8 @@ use \SSFrame\Routers\Route;
 //
 
 $route = new Route();
-$route->addRoute('get', '/user/{id}', 'UsersController@show');
-$route->addRoute('get', '/msg/{id}', 'MessagesController@send');
+$route->addRoute('get', '/login', 'AuthController@index');
+$route->addRoute('post', '/login', 'AuthController@authorize');
 
 
 $route->area(['name'=>'forum', 'prefix'=>'/supercoolforum'],

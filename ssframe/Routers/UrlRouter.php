@@ -16,16 +16,18 @@
 
 namespace SSFrame\Routers;
 
-class UrlRouter implements \SSFrame\Routers\RouterInterface {
+class UrlRouter implements RouterInterface {
 
     public $controller = "Home";
     public $method = "index";
     public $params = array();
 
     public function getURI($method = null) {
-        $uri = substr($_SERVER['PHP_SELF'], strlen($_SERVER['SCRIPT_NAME']) + 1);
+        //$uri = substr($_SERVER['PHP_SELF'], strlen($_SERVER['SCRIPT_NAME']) + 1);
+        $uri = $_SERVER['REQUEST_URI'];
 
         $data = explode('/', $uri);
+        $data = array_values(array_filter($data));
 
         if($data[0]){
             $this->controller = config("app.controller_default_namespace") . "\\controllers\\" . ucfirst($data[0]);

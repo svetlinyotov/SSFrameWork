@@ -147,4 +147,13 @@ class Common
     public static function filter(&$value) {
         $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     }
+
+    public static function generateToken($length = 25)
+    {
+        $buf = '';
+        for ($i = 0; $i < $length; ++$i) {
+            $buf .= chr(mt_rand(0, 255));
+        }
+        return bin2hex($buf);
+    }
 }

@@ -89,7 +89,8 @@ class Route implements RouterInterface {
      * @throws \Exception
      */
     public function getURI($method = null) {
-        $uri = "/".substr($_SERVER['PHP_SELF'], strlen($_SERVER['SCRIPT_NAME']) + 1)."/";
+        //$uri = "/".substr($_SERVER['PHP_SELF'], strlen($_SERVER['SCRIPT_NAME']) + 1)."/";
+        $uri = $_SERVER['REQUEST_URI'];
 
         if ($this->routesTree == null) {
             $this->routesTree = $this->parseRoutes(self::$rawRoutes);
