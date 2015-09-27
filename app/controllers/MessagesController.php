@@ -2,13 +2,15 @@
 
 namespace App\Controllers;
 
+use SSFrame\Facades\Config;
 use SSFrame\Validation;
 use SSFrame\View;
 
-class MessagesController
+class MessagesController extends BaseController
 {
 
     public function send(){
+
         /*
         $val = new Validation();
         //$val->setRule('url', 'http//az.c')->setRule('minLength', 'http://az.c', 100);

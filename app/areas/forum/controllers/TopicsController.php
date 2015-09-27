@@ -13,14 +13,21 @@ use SSFrame\View;
 class TopicsController
 {
 
-    public function listTopics($someId )
+    /**
+     * @param $someId
+     * @param \App\Bindings\UserBindingModel $m
+     * @throws \Exception
+     */
+    public function listTopics($someId, UserBindingModel $m)
     {
-        //$auth = Auth::getInstance();
-        //echo "<pre>".print_r($auth->make('sis', 'test', true), true)."</pre>";
-        //echo "<pre>".print_r($auth->user())."</pre>";
+        var_dump($m->getName());
+        echo "<hr>";
+        $auth = Auth::getInstance();
+        echo "<pre>".print_r($auth->make('sis', 'test', true), true)."</pre>";
+        echo "<pre>".print_r($auth->user()->id)."</pre>";
 
-        $g = new UserBindingModel();
-        echo "<pre>".print_r($g->getName(), true)."</pre>";
+        //$g = new UserBindingModel();
+        //echo "<pre>".print_r($g->getName(), true)."</pre>";
 
         $view = View::getInstance();
 
