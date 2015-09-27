@@ -30,7 +30,7 @@ class AuthController
         if(Validation::getErrors() === false){
             Auth::make($user->getEmail(), $user->getEmail(), $user->remember);
         }else{
-            \SSFrame\Redirect::getInstance()->to('/login')->withErrors(Validation::getErrors())->withInput(['email'=>$user->email])->go();
+            Redirect::to('/login')->withErrors(Validation::getErrors())->withInput(['email'=>$user->email])->go();
         }
     }
 
