@@ -37,7 +37,7 @@ class Config {
         }
     }
 
-    public function includeConfigFile($path) {
+    private function includeConfigFile($path) {
         if(!$path) {
             throw new \Exception('Invalid config file path', 400);
         }
