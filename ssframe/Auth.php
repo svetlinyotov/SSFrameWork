@@ -23,15 +23,20 @@ class Auth extends SimpleDB
     public function make($email, $password, $remember = false)
     {
 
-        $user = $this->sql("SELECT * FROM users WHERE email = ? AND password = ?", [$email, $password]);
+        $user = $this->sql("SELECT * FROM users WHERE email = ?", [$email]);
 
         if($user->getAffectedRows() == 1){
-            $token = Common::generateToken();
-            Session::getInstance()->getSession()->user_token=$token;
+            $user = $user->fetchRowAssoc();
+            if(Hash::verify($password, $user['password'])) {
 
-            $this->sql("UPDATE users SET access_token= ? WHERE id = ?", [$token, $user->fetchRowAssoc()['id']]);
+                $token = Common::generateToken();
+                Session::getInstance()->getSession()->user_token = $token;
 
-            return true;
+                $this->sql("UPDATE users SET access_token= ? WHERE id = ?", [$token, $user['id']]);
+
+                return true;
+            }
+            return false;
         }
 
         return false;
