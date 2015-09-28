@@ -43,6 +43,16 @@ class Auth extends SimpleDB
 
     }
 
+    public function byId($id)
+    {
+        $token = Common::generateToken();
+        Session::getInstance()->getSession()->user_token = $token;
+
+        $this->sql("UPDATE users SET access_token= ? WHERE id = ?", [$token, $id]);
+
+        return true;
+    }
+
     public function doAuth(){
         $current_token = Session::getInstance()->getSession()->user_token;
         if(is_string($current_token)){
