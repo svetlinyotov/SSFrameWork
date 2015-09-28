@@ -13,6 +13,17 @@ class BindingModel extends InputData
         return $this;
     }
 
+    public function __call($method, $args)
+    {
+        $property = strtolower(preg_replace('/get/', '', $method));
+
+        if(property_exists($this, $property)){
+            return $this->{$property};
+        }
+
+        throw new \Exception("Property $property is not defined", 400);
+    }
+
     public function getCsrfToken()
     {
         return $this->csrf_token;
