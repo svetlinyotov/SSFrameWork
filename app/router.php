@@ -16,7 +16,7 @@ $route->addRoute('get', '/login', 'AuthController@index');
 $route->addRoute('get', '/logout', 'AuthController@logout');
 $route->addRoute('post', '/login', 'AuthController@authorize');
 
-
+//new
 $route->area(['name'=>'forum', 'prefix'=>'/supercoolforum'],
     [
         ['post', '/topics/{id}', 'TopicsController@listTopics'],
