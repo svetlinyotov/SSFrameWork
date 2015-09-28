@@ -15,6 +15,8 @@ $route = new Route();
 $route->addRoute('get', '/login', 'AuthController@index');
 $route->addRoute('get', '/logout', 'AuthController@logout');
 $route->addRoute('post', '/login', 'AuthController@authorize');
+$route->addRoute('get', '/register', 'AuthController@register');
+$route->addRoute('post', '/register', 'AuthController@registration');
 
 
 $route->area(['name'=>'forum', 'prefix'=>'/supercoolforum'],
