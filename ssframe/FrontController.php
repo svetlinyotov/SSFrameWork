@@ -132,9 +132,9 @@ class FrontController {
 
         if (preg_match_all('/@param\s+([^\s]+)/', $method->getDocComment(), $matches)) {
             foreach ($matches[1] as $param) {
-                if(substr($param, -12) == "BindingModel"){
+                //if(substr($param, -12) == "BindingModel"){
                     array_push($unbindModels, $param);
-                }
+                //}
             }
         }
 
