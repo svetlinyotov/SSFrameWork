@@ -63,6 +63,7 @@ class DBSession extends SimpleDB implements ISession{
     public function unsetKey($name)
     {
         unset($this->sessionData[$name]);
+        $this->saveSession();
     }
 
     public function destroySession() {
