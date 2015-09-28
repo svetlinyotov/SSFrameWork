@@ -9,6 +9,10 @@ class Auth
     {
         return \SSFrame\Auth::getInstance()->make($username, $password, $remember);
     }
+    public static function byId($id)
+    {
+        return \SSFrame\Auth::getInstance()->byId($id);
+    }
     public static function doAuth(){
         return \SSFrame\Auth::getInstance()->doAuth();
     }
