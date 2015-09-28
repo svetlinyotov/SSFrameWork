@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 
 use App\Bindings\AuthLoginBindingModel;
+use App\Bindings\AuthRegisterBindingModel;
+use App\Models\User;
 use SSFrame\Facades\Auth;
 use SSFrame\Facades\Redirect;
 use SSFrame\Facades\Validation;
@@ -17,6 +19,15 @@ class AuthController extends \SSFrame\Auth
     public function index()
     {
         View::appendToLayout('body', "auth.login");
+        View::display('layouts.main');
+    }
+
+    /**
+     * @UnAuthorized
+     */
+    public function register()
+    {
+        View::appendToLayout('body', "auth.register");
         View::display('layouts.main');
     }
 
@@ -40,6 +51,28 @@ class AuthController extends \SSFrame\Auth
 
         }else{
             Redirect::to('/login')->withErrors(Validation::getErrors())->withInput(['email'=>$user->email])->go();
+        }
+    }
+
+    /**
+     * @param \App\Bindings\AuthRegisterBindingModel $user
+     * @UnAuthorized
+     */
+    public function registration(AuthRegisterBindingModel $user)
+    {
+        Validation::validate((array)$user,[
+            'email' => 'required|email|min:5',
+            'password' => 'required|min:5',
+            'repassword' => 'required|min:5|matches:'.$user->getPassword(),
+            'names' => 'required',
+        ]);
+
+        if(Validation::getErrors() == false){
+            User::create($user->getEmail(), $user->getPassword(), $user->getNames());
+            Redirect::to('/')->go();
+
+        }else{
+            Redirect::to('/register')->withErrors(Validation::getErrors())->withInput(['email'=>$user->getEmail(), 'names'=>$user->getNames()])->go();
         }
     }
 

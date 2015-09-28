@@ -54,6 +54,9 @@
                     <li>
                         <a href="<?=asset('/login');?>">Login</a>
                     </li>
+                    <li>
+                        <a href="<?=asset('/register');?>">Register</a>
+                    </li>
                 <?php }else{ ?>
                     <li>
                         <a href="<?=asset('/logout');?>">Logout</a>
