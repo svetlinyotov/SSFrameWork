@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use SSFrame\DB\SimpleDB;
+use SSFrame\Facades\DB;
 use SSFrame\Hash;
 
 class User extends SimpleDB
@@ -12,7 +13,7 @@ class User extends SimpleDB
     {
         $password = Hash::make($password);
 
-        self::sql("INSERT INTO users (email, password, names) VALUES (?, ?, ?)", [$email, $password, $names]);
+        DB::insert("INSERT INTO users (email, password, names) VALUES (?, ?, ?)", [$email, $password, $names]);
     }
 
 }
