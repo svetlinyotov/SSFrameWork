@@ -22,6 +22,10 @@ class Redirect
     public function to($path)
     {
         $this->_path = $path;
+
+        if($path == "back") {
+            $this->_path = $_SERVER['HTTP_REFERER'];
+        }
         return $this;
     }
     public function withErrors($errors)
