@@ -14,7 +14,7 @@ use SSFrame\Facades\View;
 class AuthController extends \SSFrame\Auth
 {
     /**
-     * @UnAuthorized
+     * @UnAuthorized('/home')
      */
     public function index()
     {
@@ -56,9 +56,10 @@ class AuthController extends \SSFrame\Auth
 
     /**
      * @param \App\Bindings\AuthRegisterBindingModel $user
+     * @param \App\Models\User $model
      * @UnAuthorized
      */
-    public function registration(AuthRegisterBindingModel $user)
+    public function registration(AuthRegisterBindingModel $user, User $model)
     {
         Validation::validate((array)$user,[
             'email' => 'required|email|min:5',
@@ -68,12 +69,22 @@ class AuthController extends \SSFrame\Auth
         ]);
 
         if(Validation::getErrors() == false){
-            User::create($user->getEmail(), $user->getPassword(), $user->getNames());
+            $model->create($user->getEmail(), $user->getPassword(), $user->getNames());
             Redirect::to('/')->go();
 
         }else{
             Redirect::to('/register')->withErrors(Validation::getErrors())->withInput(['email'=>$user->getEmail(), 'names'=>$user->getNames()])->go();
         }
+    }
+
+    /**
+     * Only for testing
+     * @Authorized
+     * @UserRole(1 , 2 , 0, 3 )
+     */
+    public function profile()
+    {
+        return "asdasd";
     }
 
 }

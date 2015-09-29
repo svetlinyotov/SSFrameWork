@@ -3,9 +3,8 @@
 return [
     'password_hash_cost' => 10, //1..12
     'user_roles' => [
-        0 => 'superadmin',
-        1 => 'admin',
-        2 => 'moderator',
-        3 => 'user'
+        0 => 'admin',
+        1 => 'editor',
+        2 => 'user'
     ]
 ];
