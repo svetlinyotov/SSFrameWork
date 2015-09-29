@@ -40,7 +40,7 @@
             <td class="text-center"><a href="<?=asset('/cart/delete/'.$item['id']); ?>" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a></td>
         </tr>
 
-        <?php $total = $session_cart[$item['id']]*$item['price']; } ?>
+        <?php $total += $session_cart[$item['id']]*$item['price']; } ?>
 
         <tr>
             <td colspan="2"></td>

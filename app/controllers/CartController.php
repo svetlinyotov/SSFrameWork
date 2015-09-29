@@ -3,10 +3,13 @@
 namespace App\Controllers;
 
 
+use app\bindings\CheckOutBindingModel;
 use App\Bindings\UpdateCartBindingModel;
 use App\Models\Cart;
 use App\Models\Products;
+use SSFrame\Facades\Auth;
 use SSFrame\Facades\Redirect;
+use SSFrame\Facades\Validation;
 use SSFrame\Facades\View;
 
 class CartController extends BaseController
@@ -24,7 +27,7 @@ class CartController extends BaseController
     {
         $list = $cart->listProducts($this->session->getSession()->cart);
 
-        View::appendToLayout('body', "cart");
+        View::appendToLayout('body', "cart.cart");
         View::display('layouts.main', ['items' => $list, 'session_cart' => $this->session->getSession()->cart]);
     }
 
@@ -74,6 +77,41 @@ class CartController extends BaseController
     {
         $this->session->getSession()->unsetKey('cart');
         Redirect::to('/cart')->go();
+    }
+
+    /**
+     * @Authorized('/login')
+     * @param \App\Models\Cart $cart
+     */
+    public function checkout(Cart $cart)
+    {
+        $list = $cart->listProducts($this->session->getSession()->cart);
+
+        View::appendToLayout('body', "cart.checkout");
+        View::display('layouts.main', ['items' => $list, 'session_cart' => $this->session->getSession()->cart]);
+    }
+
+    /**
+     * @Authorized('/login')
+     * @param \App\Bindings\CheckOutBindingModel $input
+     * @param \App\Models\Cart $cart
+     */
+    public function doCheckout(CheckOutBindingModel $input, Cart $cart)
+    {
+        Validation::validate($input, [
+            'names' => 'required|min:5',
+            'email' => 'required|min:5|email',
+            'mobile' => 'required',
+            'address' => 'required',
+        ]);
+
+        if(Validation::getErrors() == false){
+            $cart->checkout($input->names, $input->email, $input->mobile, $input->address);
+            $this->emptyCart();
+            return Redirect::to('/products')->withSuccess("You have sent your order successfully.")->go();
+        }
+
+        Redirect::to('/cart/checkout')->withErrors(Validation::getErrors())->withInput($input)->go();
     }
 
 }
