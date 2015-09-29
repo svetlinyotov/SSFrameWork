@@ -131,10 +131,11 @@ class FrontController {
         $unbindModels = [];
 
         if (preg_match_all('/@param\s+([^\s]+)/', $method->getDocComment(), $matches)) {
+
             foreach ($matches[1] as $param) {
-                //if(substr($param, -12) == "BindingModel"){
+                if(class_exists($param)) {
                     array_push($unbindModels, $param);
-                //}
+                }
             }
         }
 
@@ -143,7 +144,7 @@ class FrontController {
 
             for($i = 1; $i <= $difference; $i++){
                 if(isset($unbindModels[$i-1])) {
-                    $this->params[] = new $unbindModels[$i-1]();
+                    $this->params[] = new $unbindModels[$i - 1]();
                 }else{
                     $this->params[] = null;
                 }

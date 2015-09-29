@@ -11,23 +11,47 @@ class Annotations
 
     public function __construct($docCom)
     {
-        if(strpos($docCom, "@UnAuthorized")){
-            $this->unauthorized();
+        preg_match_all("/@([a-zA-Z]+)(\\(('|\")?([^'\"]+)('|\")?\\))?/", $docCom, $matches);
+
+        foreach ($matches[1] as $key=>$match) {
+            $parameter = $matches[4][$key];
+
+            if($match == "UnAuthorized"){
+                $this->unauthorized($parameter);
+            }
+            if($match == "Authorized"){
+                $this->authorized($parameter);
+            }
+            if($match == "UserRole"){
+                $this->userRole($parameter);
+            }
         }
-        if(strpos($docCom, "@Authorized")){
-            $this->authorized();
-        }
+
     }
 
-    public function unauthorized(){
+    public function unauthorized($url = '/'){
+        if(strlen($url) == 0) $url = '/';
         if(\SSFrame\Facades\Auth::user() == true){
-            Redirect::to('/')->go();
+            Redirect::to($url)->go();
         }
     }
 
-    public function authorized(){
+    public function authorized($url = '/'){
+        if(strlen($url) == 0) $url = '/';
         if(\SSFrame\Facades\Auth::user() == false){
-            Redirect::to('/')->go();
+            Redirect::to($url)->go();
+        }
+    }
+
+    public function userRole($id)
+    {
+        if(\SSFrame\Facades\Auth::user() == true) {
+            $roles = array_map('trim', explode(",", $id));
+            $current_role = \SSFrame\Facades\Auth::user()->role;
+
+            if (array_search($current_role, $roles) === false) {
+                Redirect::to('/')->go();
+            }
         }
     }
 
