@@ -26,10 +26,13 @@ class View
         if(class_exists($current_controller)) {
             $reflection = new \ReflectionClass($current_controller);
             $view_path = strtolower($reflection->getNamespaceName()) . "/../views";
+            if(is_dir($view_path) && is_readable($view_path)) {
 
-            $this->viewPath = realpath(config("app.namespaces")["App"] . '/../' . $view_path);
+                $this->viewPath = realpath(config("app.namespaces")["App"] . '/../' . $view_path);
+            }else{
+                $this->viewPath = config("app.views_default_path");
+            }
         }
-
         $this->errors = Session::getInstance()->getSession()->withErrors;
         $this->success = Session::getInstance()->getSession()->withSuccess;
         $this->input = Session::getInstance()->getSession()->withInput;
@@ -49,7 +52,7 @@ class View
                 throw new \Exception('view path',500);
             }
         } else {
-            throw new \Exception('view path',500);
+            throw new \Exception('view path:',500);
         }
     }
 
@@ -100,7 +103,7 @@ class View
 
             return self::includeFileScope($fl, $this->data);
         } else {
-            throw new \Exception('View ' . $file . ' cannot be included', 500);
+            throw new \Exception('View ' . $fl . ' cannot be included', 500);
         }
     }
     private static function getFileDocBlock($file)
@@ -115,6 +118,23 @@ class View
     }
 
     private function includeFileScope($____filePath, $__data) {
+        $doc = self::getFileDocBlock($____filePath);
+
+        if($doc != null) {
+            preg_match_all('/\\@var\\s+((\\\\[A-Za-z0-9]+)+)\\s+\\$([A-Za-z0-9_]+)/', $doc, $matches);
+            //echo "<pre>" . print_r($matches, true) . "</pre><br>";
+
+            foreach ($matches[3] as $k => $var) {
+                $namespace = ltrim($matches[1][$k], '\\');
+                $$var = new $namespace();
+                $returned = get_class($$var);
+                if ($returned != $namespace) {
+                    throw new \Exception("Given object type must be {$namespace}, instead given {$returned}", 400);
+                }
+            }
+        }
+
+
         ob_start();
         $__data = (array)$__data;
         extract($__data, EXTR_OVERWRITE);
@@ -126,20 +146,6 @@ class View
 
         $clean = ob_get_clean();
 
-        $doc = self::getFileDocBlock($____filePath);
-        if($doc != null) {
-            preg_match_all('/\\@var\\s+((\\\\[A-Za-z0-9]+)+)\\s+\\$([A-Za-z0-9_]+)/', $doc, $matches);
-            //echo "<pre>" . print_r($matches, true) . "</pre><br>";
-
-            foreach ($matches[3] as $k => $var) {
-                $vars = $$var;
-                $namespace = ltrim($matches[1][$k], '\\');
-                $returned = gettype($vars);
-                if ($vars != $namespace) {
-                    throw new \Exception("Given object type must be {$namespace}, instead given {$returned}", 400);
-                }
-            }
-        }
         return $clean;
     }
 
