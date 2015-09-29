@@ -17,7 +17,7 @@ class Products extends SimpleDB
                               p.price,
                               p.quantity,
                               p.photo,
-                              SUM(DISTINCT reviews.id) as total_reviews,
+                              COUNT(DISTINCT reviews.id) as total_reviews,
                               AVG(reviews.stars) as avg_stars
                             FROM products AS p
                             left JOIN reviews ON reviews.product_id = p.id
