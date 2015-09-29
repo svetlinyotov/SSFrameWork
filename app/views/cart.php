@@ -27,9 +27,11 @@
         <?php foreach ($items as $item) { ?>
         <tr>
             <td></td>
-            <td><?=$item['product_name']; ?><br><i><?=$item['category_name']; ?></i></td>
             <td>
-                <?=Form::text('quantity['.$item['id'].']', $session_cart[$item['id']], ['class'=>'form-control', 'style'=>'width:60px; display:inline-block']); ?>
+                <a href="<?=asset('/products/product/'.$item['id']); ?>"><?=$item['product_name']; ?></a>
+                <br><a href="<?=asset('/products/category/'.$item['category_id']); ?>"><i><?=$item['category_name']; ?></i></a></td>
+            <td>
+                <?=Form::number('quantity['.$item['id'].']', $session_cart[$item['id']], null, null, ['class'=>'form-control', 'style'=>'width:60px; display:inline-block']); ?>
                 x $<?=$item['price'];?>
             </td>
             <td>

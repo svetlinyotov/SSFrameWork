@@ -1,6 +1,14 @@
 <?php
-/** @var \App\Models\Reviews $reviews_model */
+/** @var \App\Models\Reviews $reviews_model
+ * @var \App\Models\Products $product_model */
 use SSFrame\Facades\Auth; use \SSFrame\Form; ?>
+
+<?php
+    if($product_model->checkQuantity($product['id']) <= $cart[$product['id']]){
+        $disabled = "disabled";
+    }
+?>
+
 <div class="row">
 
     <div class="col-md-3">
@@ -27,14 +35,21 @@ use SSFrame\Facades\Auth; use \SSFrame\Form; ?>
         <div class="thumbnail">
             <img class="img-responsive" src="http://placehold.it/800x300" alt="">
             <div class="caption-full">
-                <h4 class="pull-right text-right">
-                    <?php if(array_key_exists($product['id'], $cart)) { ?>
-                        <a href="<?=asset('/cart/add/'.$product['id']);?>" class="btn btn-info">Add another one for $<?=$product['price'];?></a><br>
+                <?php if($disabled == null) { ?>
+                    <h4 class="pull-right text-right">
+                        <?php if(array_key_exists($product['id'], $cart)) { ?>
+                            <a href="<?=asset('/cart/add/'.$product['id']);?>" class="btn btn-info <?=$disabled;?>">Add another one for $<?=$product['price'];?></a><br>
+                            <small>Currently <?=$cart[$product['id']];?> added in cart.</small>
+                        <?php }else{ ?>
+                            <a href="<?=asset('/cart/add/'.$product['id']);?>" class="btn btn-info <?=$disabled;?>">Buy for $<?=$product['price'];?></a>
+                        <?php } ?>
+                    </h4>
+                <?php }else{ ?>
+                    <h4 class="pull-right text-right">
+                        Out of stock.<br>
                         <small>Currently <?=$cart[$product['id']];?> added in cart.</small>
-                    <?php }else{ ?>
-                        <a href="<?=asset('/cart/add/'.$product['id']);?>" class="btn btn-info">Buy for $<?=$product['price'];?></a>
-                    <?php } ?>
-                </h4>
+                    </h4>
+                <?php } ?>
                 <h4><a href="#"><?=$product['name'];?></a>
                 </h4>
                 <p><?=$product['description'];?></p>
