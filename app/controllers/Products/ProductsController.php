@@ -18,8 +18,9 @@ class ProductsController extends BaseController
      */
     public function listAll($id, Products $products, Categories $categories)
     {
+        $cart = $this->session->getSession()->cart?:[''];
         $this->view->appendToLayout('body', "products.products");
-        $this->view->display('layouts.main', ['data'=>$products->listAllFromCat($id), 'categories'=>$categories->listAllNames()]);
+        $this->view->display('layouts.main', ['data'=>$products->listAllFromCat($id), 'cart' => $cart, 'categories'=>$categories->listAllNames()]);
     }
 
     /**
@@ -30,7 +31,7 @@ class ProductsController extends BaseController
      */
     public function getProduct($id, Products $products, Reviews $reviews, Categories $categories)
     {
-        $cart = $this->session->getSession()->cart;
+        $cart = $this->session->getSession()->cart?:[''];
 
         $this->view->appendToLayout('body', "products.product");
 
