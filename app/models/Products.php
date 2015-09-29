@@ -21,7 +21,7 @@ class Products extends SimpleDB
                               AVG(reviews.stars) as avg_stars
                             FROM products AS p
                             left JOIN reviews ON reviews.product_id = p.id
-                            WHERE p.category_id = ?
+                            WHERE p.category_id = ? AND is_available = 1 AND quantity > 0
                             GROUP BY reviews.product_id", [$cat_id])->fetchAllAssoc();
     }
 
