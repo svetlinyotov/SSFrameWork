@@ -50,6 +50,9 @@
                 <li>
                     <a href="<?=asset('/contact');?>">Contact us</a>
                 </li>
+                <li>
+                    <a href="<?=asset('/cart');?>">Cart</a>
+                </li>
                 <?php if(Auth::user() == false) { ?>
                     <li>
                         <a href="<?=asset('/login');?>">Login</a>
