@@ -9,8 +9,12 @@ class Validation
     private $_rules = array();
     private $_errors = array();
 
-    public function validate(Array $params, Array $data)
+    public function validate($params, Array $data)
     {
+        if(!is_array($params)) {
+            $params = (array)$params;
+        }
+
         foreach ($data as $param_name => $rules) {
             $rules = explode("|", $rules);
 
