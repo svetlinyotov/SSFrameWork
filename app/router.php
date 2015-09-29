@@ -1,28 +1,24 @@
 <?php
 use \SSFrame\Routers\Route;
 
-//Route::match('get', '/', 'HomeController@index');
-//Route::match('get', '/user/', 'UserController@index');
-//Route::match('get', '/user/{id}', 'UserController@show');
-//Route::match('post', '/user/{id}', 'UserController@save');
-//Route::match('get', '/message/send/{user}', 'MessagesController@send');
-//Route::match('get', '/getalluser/images/{target}/{id}/{id2?}', 'UserController@image');
-//Route::match('get', '/supercoolforum/topics', 'UserController@image');
-//
-//
-
 $route = new Route();
 $route->addRoute('get', '/login', 'AuthController@index');
 $route->addRoute('get', '/logout', 'AuthController@logout');
 $route->addRoute('post', '/login', 'AuthController@authorize');
 $route->addRoute('get', '/register', 'AuthController@register');
 $route->addRoute('post', '/register', 'AuthController@registration');
+$route->addRoute('get', '/admin', 'Products\CategoriesController@index');
+$route->addRoute('get', '/products', 'Products\CategoriesController@index');
+$route->addRoute('get', '/products/categories', 'Products\CategoriesController@index');
+$route->addRoute('get', '/products/category/{id}', 'Products\ProductsController@listAll');
+$route->addRoute('get', '/products/product/{id}', 'Products\ProductsController@getProduct');
+$route->addRoute('post', '/review/{product_id}', 'Products\ReviewsController@update');
 
-//new
-$route->area(['name'=>'forum', 'prefix'=>'/supercoolforum'],
+//Areas
+/*
+$route->area(['name'=>'admin', 'prefix'=>'/admin'],
     [
-        ['post', '/topics/{id}', 'TopicsController@listTopics'],
-        ['get', '/topics/add', 'TopicsController@create'],
-        ['get', '/answers', 'AnswersController@list']
+        ['get', '/', 'CategoriesController@index'],
+        ['get', '/category/{id}', 'CategoriesController@index'],
     ]
-);
+);*/

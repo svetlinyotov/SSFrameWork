@@ -64,7 +64,7 @@
                 <?php } ?>
             </ul>
         </div>
-    </div>-->
+    </div>
 </nav>
 
 <div class="container">
