@@ -43,4 +43,14 @@ class Products extends SimpleDB
                             GROUP BY reviews.product_id", [$id])->fetchRowAssoc();
     }
 
+    public function getName($id)
+    {
+        return $this->sql("SELECT name FROM products WHERE id = ?", [$id])->fetchRowAssoc()['name'];
+    }
+
+    public function checkQuantity($id)
+    {
+        return $this->sql("SELECT quantity FROM products WHERE id = ?", [$id])->fetchRowAssoc()['quantity'];
+    }
+
 }
