@@ -16,7 +16,8 @@ $route->addRoute('get', '/products/product/{id}', 'Products\ProductsController@g
 
 $route->addRoute('post', '/review/{product_id}', 'Products\ReviewsController@update');
 
-$route->addRoute('get', '/cart', 'CartController@index');
+//$route->addRoute('get', '/cart', 'CartController@index');
+//$route->addRoute('get', '/cart/add/{product_id}', 'CartController@add');
 
 //Areas
 /*
