@@ -30,10 +30,12 @@ class ProductsController extends BaseController
      */
     public function getProduct($id, Products $products, Reviews $reviews, Categories $categories)
     {
+        $cart = $this->session->getSession()->cart;
+
         $this->view->appendToLayout('body', "products.product");
 
         //echo "<pre>".print_r($reviews->getForProduct($id),true)."</pre>";
-        $this->view->display('layouts.main', ['product'=>$products->get($id), 'reviews'=>$reviews->getForProduct($id), 'current_user_review' => $reviews->getForUser(Auth::user()->id, $id),'categories'=>$categories->listAllNames()]);
+        $this->view->display('layouts.main', ['product'=>$products->get($id), 'cart' => $cart, 'reviews'=>$reviews->getForProduct($id), 'current_user_review' => $reviews->getForUser(Auth::user()->id, $id),'categories'=>$categories->listAllNames()]);
     }
 
 
