@@ -52,18 +52,31 @@
             <div class="col-sm-4 col-lg-4 col-md-4">
                     <div class="thumbnail">
                         <img src="http://placehold.it/320x150" alt="">
-                        <div class="caption">
-                            <h4 class="pull-right">$<?=$item['price'];?></h4>
-                            <h4><a href="<?=asset('/products/product/'.$item['id']);?>"><?=$item['name'];?></a>
-                            </h4>
+                        <p class="label label-default pull-right"><?=$item['quantity'];?> left in our store</p>
+                        <br class="clearfix">
+                        <div class="title">
+                            <h4 class="pull-right price">$<?=$item['price'];?></h4>
+                            <h4><a href="<?=asset('/products/product/'.$item['id']);?>"><?=$item['name'];?></a></h4>
                             <p><?=mb_substr($item['description'], 0, 100);?></p>
                         </div>
+                        <div class="caption">
+                            <?php if(array_key_exists($item['id'], $cart)) { ?>
+                                <a href="<?=asset('/cart/add/'.$item['id']);?>" class="btn btn-info btn-block <?=$disabled;?>">Add another one for $<?=$item['price'];?></a>
+                                <small>Currently <?=$cart[$item['id']];?> added in cart.</small>
+                            <?php }else{ ?>
+                                <a href="<?=asset('/cart/add/'.$item['id']);?>" class="btn btn-info btn-block <?=$disabled;?>">Buy for $<?=$item['price'];?></a>
+                            <?php } ?><br class="clearfix">
+                        </div>
+
                         <div class="ratings">
                             <p class="pull-right"><?=$item['total_reviews']?:0;?> reviews</p>
                             <p>
-                                <?php for($i = round($item['avg_stars']); $i > 0; $i--){ ?>
+                                <?php for($i = 0; $i < round($item['avg_stars']); $i++){ ?>
                                     <span class="glyphicon glyphicon-star"></span>
-                                <?php } ?>
+                                <?php }  ?>
+                                <?php for($i = $i; $i < 5; $i++){ ?>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                <?php }  ?>
                             </p>
                         </div>
                     </div>

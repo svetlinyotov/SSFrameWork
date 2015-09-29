@@ -37,6 +37,7 @@ use SSFrame\Facades\Auth; use \SSFrame\Form; ?>
             <div class="caption-full">
                 <?php if($disabled == null) { ?>
                     <h4 class="pull-right text-right">
+                        <span class="label label-default"><?=$product['quantity'];?> left in our store</span><br>
                         <?php if(array_key_exists($product['id'], $cart)) { ?>
                             <a href="<?=asset('/cart/add/'.$product['id']);?>" class="btn btn-info <?=$disabled;?>">Add another one for $<?=$product['price'];?></a><br>
                             <small>Currently <?=$cart[$product['id']];?> added in cart.</small>
@@ -50,8 +51,8 @@ use SSFrame\Facades\Auth; use \SSFrame\Form; ?>
                         <small>Currently <?=$cart[$product['id']];?> added in cart.</small>
                     </h4>
                 <?php } ?>
-                <h4><a href="#"><?=$product['name'];?></a>
-                </h4>
+                <h1><a href="#"><?=$product['name'];?></a>
+                </h1>
                 <p><?=$product['description'];?></p>
             </div>
             <div class="ratings">

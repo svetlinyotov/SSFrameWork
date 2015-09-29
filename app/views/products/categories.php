@@ -1,5 +1,13 @@
 <div class="row">
-
+    <?php if($success) { ?>
+        <div class="alert alert-success">
+            <?php
+            foreach ($success as $succes) {
+                echo "$succes <br>";
+            }
+            ?>
+        </div>
+    <?php } ?>
     <?php foreach ($data as $cat) { ?>
 
 
