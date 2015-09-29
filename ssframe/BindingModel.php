@@ -36,7 +36,11 @@ class BindingModel extends InputData
         foreach ($post as $var => $value) {
 
             if(property_exists($obj, $var)) {
-                $obj->{$var} = trim($value);
+                if(is_array($value)){
+                    $obj->{$var} = array_map('trim',$value);
+                }else {
+                    $obj->{$var} = trim($value);
+                }
             }else{
                 throw new \Exception("Unexpected value for $var form input", 400);
             }

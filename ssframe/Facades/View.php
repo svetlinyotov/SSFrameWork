@@ -10,9 +10,9 @@ class View
         \SSFrame\View::getInstance()->setViewDirectory($path);
     }
 
-    public static function display($name)
+    public static function display($name, $params=[], $asString=false)
     {
-        return \SSFrame\View::getInstance()->display($name);
+        return \SSFrame\View::getInstance()->display($name, $params, $asString);
     }
 
     public static function getLayoutData($name)
