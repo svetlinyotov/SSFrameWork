@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Shop Homepage - Start Bootstrap Template</title>
+    <title>My Shop</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="<?=asset('/css/bootstrap.min.css');?>" rel="stylesheet">
@@ -46,9 +46,6 @@
             <ul class="nav navbar-nav">
                 <li>
                     <a href="<?=asset('/products');?>">Products</a>
-                </li>
-                <li>
-                    <a href="<?=asset('/contact');?>">Contact us</a>
                 </li>
                 <li>
                     <a href="<?=asset('/cart');?>">Cart</a>
