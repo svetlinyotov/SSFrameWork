@@ -153,7 +153,9 @@ class FrontController {
 
         Annotations::getInstance($annotations);
 
-        call_user_func_array(array($newController, $this -> method), $this->params);
+
+        call_user_func_array(array($newController, $this->method), $this->params);
+
     }
 
     public static function getInstance()

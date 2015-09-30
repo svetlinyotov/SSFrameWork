@@ -27,19 +27,25 @@ class Annotations
             }
         }
 
+        return false;
+
     }
 
-    public function unauthorized($url = '/'){
-        if(strlen($url) == 0) $url = '/';
+    public function unauthorized($url){
         if(\SSFrame\Facades\Auth::user() == true){
-            Redirect::to($url)->go();
+            if(strlen($url) > 0) {
+                Redirect::to($url)->go();
+            }
+            throw new \Exception("Accessing method forbidden", 402);
         }
     }
 
-    public function authorized($url = '/'){
-        if(strlen($url) == 0) $url = '/';
+    public function authorized($url){
         if(\SSFrame\Facades\Auth::user() == false){
-            Redirect::to($url)->go();
+            if(strlen($url) > 0) {
+                Redirect::to($url)->go();
+            }
+            throw new \Exception("Accessing method forbidden", 402);
         }
     }
 
@@ -50,7 +56,7 @@ class Annotations
             $current_role = \SSFrame\Facades\Auth::user()->role;
 
             if (array_search($current_role, $roles) === false) {
-                Redirect::to('/')->go();
+                throw new \Exception("Current user's role not authorized", 402);
             }
         }
     }
