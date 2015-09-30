@@ -1,12 +1,15 @@
-<?php /** @var \App\Models\Promotions $promotions */ ?>
+<?php /** @var \App\Models\Promotions $promotions */ use SSFrame\Facades\Auth; use SSFrame\Form; ?>
 <div class="container">
     <div class="row">
 
         <div class="col-md-3">
             <p class="lead">Categories</p>
             <div class="list-group">
-                <?php foreach ($categories as $category) {
+                <?php
+                $list = [];
+                foreach ($categories as $category) {
                     if($category['id'] == $currentCategory){$active = "active";}
+                    $list[$category['id']] = $category['name'];
                     echo '<a href="'.asset('/products/category/'.$category['id']).'" class="list-group-item '.$active.'">'.$category['name'].'</a>';
                     $active = "";
                 } ?>
@@ -47,14 +50,17 @@
 
             </div>
 -->
-            <div class="row">
+            <?php if(Auth::user()->role < 3) { ?>
+                <a href="" class="btn btn-success" data-toggle="modal" data-target="#cat_add"><i class="glyphicon glyphicon-plus"></i></a>
+            <?php } ?>
 
+            <div class="row">
             <?php
                 foreach ($data as $item) {
 
                     $promotion = $promotions->getProductPromotion($item['id']);
                     $newPrice = round($item['price'] * ((100-$promotion) / 100), 2);
-                    $price = "$".$price;
+                    $price = "$".$item['price'];
 
                     if($promotion) {
                         $price = "<span class='red'>$".$newPrice."</span> <small class='strike'>$".$item['price']."</small>";
@@ -66,7 +72,11 @@
                     <?php if($promotion) { ?>
                         <h1 class="discount discount-small">-<?=$promotion;?>% </h1>
                     <?php } ?>
-                    <img src="http://placehold.it/320x150" alt="">
+                    <?php if($item['photo'] != "") { ?>
+                        <img src="<?= asset('/user_data/products/'.$item['photo'])?>" alt="">
+                    <?php }else{ ?>
+                        <img src="http://placehold.it/320x150" alt="">
+                    <?php } ?>
                     <p class="label label-default pull-right"><?=$item['quantity'];?> left in our store</p>
                     <br class="clearfix">
                     <div class="title">
@@ -94,6 +104,15 @@
                             <?php }  ?>
                         </p>
                     </div>
+
+                    <div>
+                        <?php if(Auth::user()->role == 0) { ?>
+                            <a href="#cat_edit" class="btn btn-warning" data-id="<?=$item['id'];?>" data-title="<?=$item['name'];?>" data-description="<?=$item['description'];?>" data-price="<?=$item['price'];?>" data-quantity="<?=$item['quantity'];?>"  data-category="<?=$item['category_id'];?>" data-toggle="modal" data-target="#cat_edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <?php } ?>
+                        <?php if(Auth::user()->role < 3) { ?>
+                            <a href="#cat_delete" class="btn btn-danger" data-toggle="modal" data-id="<?=$item['id'];?>" data-target="#cat_delete"><i class="glyphicon glyphicon-trash"></i></a>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
             <?php } ?>
@@ -106,3 +125,141 @@
     </div>
 
 </div>
+
+
+
+<?php if(Auth::user()->role < 3) { ?>
+    <div class="modal fade" id="cat_add" tabindex="-1" role="dialog" aria-labelledby="cat_add">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add category</h4>
+                </div>
+                <?=Form::open(asset('/product/add'), 'POST', ['class'=>'form', 'role'=>'form'], true); ?>
+                <div class="modal-body">
+                    <?=Form::csrf();?>
+                    <div class="form-group">
+                        <?=Form::label('title', 'Title');?>
+                        <?=Form::text('title', '', ['class'=>'form-control']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('description', 'Description');?>
+                        <?=Form::textarea('description', '', ['class'=>'form-control']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('price', 'Price');?>
+                        <?=Form::text('price', '', ['class'=>'form-control']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('quantity', 'Quantity');?>
+                        <?=Form::text('quantity', '', ['class'=>'form-control']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('category', 'Category');?>
+                        <?=Form::select('category', $list, null, ['class'=>'form-control']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('photo', 'Photo');?>
+                        <?=Form::file('photo', ['class'=>'form-control']); ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </div>
+                <?=Form::close(); ?>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<?php if(Auth::user()->role == 0) { ?>
+    <div class="modal fade" id="cat_edit" tabindex="-1" role="dialog" aria-labelledby="cat_edit">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit category</h4>
+                </div>
+                <?=Form::open(asset('/product/edit/'), 'POST', ['class'=>'form', 'role'=>'form'], true); ?>
+                <div class="modal-body">
+                    <?=Form::csrf();?>
+                    <div class="form-group">
+                        <?=Form::label('title', 'Title');?>
+                        <?=Form::text('title', '', ['class'=>'form-control', 'id'=>'input-title']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('description', 'Description');?>
+                        <?=Form::textarea('description', '', ['class'=>'form-control', 'id'=>'input-description']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('price', 'Price');?>
+                        <?=Form::text('price', '', ['class'=>'form-control', 'id'=>'input-price']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('quantity', 'Quantity');?>
+                        <?=Form::text('quantity', '', ['class'=>'form-control', 'id'=>'input-quantity']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('category', 'Category');?>
+                        <?=Form::select('category', $list, null, ['class'=>'form-control', 'id'=>'input-category']); ?>
+                    </div>
+                    <div class="form-group">
+                        <?=Form::label('photo', 'Photo');?>
+                        <?=Form::file('photo', ['class'=>'form-control']); ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+                <?=Form::close(); ?>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<?php if(Auth::user()->role < 3) { ?>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="cat_delete" aria-labelledby="cat_delete">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                Are you sure you want to delete the product?
+
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <a href="#" id="delete_button" class="btn btn-danger">Delete</a>
+            </div>
+
+        </div>
+    </div>
+<?php } ?>
+
+<?php if(Auth::user()->role < 3) { ?>
+    <script type="text/javascript">
+        $('#cat_edit').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var title = button.data('title');
+            var price = button.data('price');
+            var quantity = button.data('quantity');
+            var category = button.data('category');
+            var description = button.data('description');
+
+            var modal = $(this);
+            modal.find('#input-title').val(title);
+            modal.find('#input-price').val(price);
+            modal.find('#input-quantity').val(quantity);
+            modal.find('#input-description').val(description);
+            modal.find('#input-category option[value='+category+']').prop('selected', true);
+            modal.find('form').attr('action', '<?=asset('/admin/product');?>/' + id);
+        });
+
+        $('#cat_delete').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+
+            var modal = $(this);
+            modal.find('#delete_button').attr('href', '<?=asset('/admin/product/delete');?>/' + id);
+        });
+    </script>
+<?php } ?>

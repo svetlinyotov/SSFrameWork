@@ -20,9 +20,9 @@ class Products extends SimpleDB
                               COUNT(DISTINCT reviews.id) as total_reviews,
                               AVG(reviews.stars) as avg_stars
                             FROM products AS p
-                            left JOIN reviews ON reviews.product_id = p.id
+                            LEFT JOIN reviews ON reviews.product_id = p.id
                             WHERE p.category_id = ? AND is_available = 1 AND quantity > 0
-                            GROUP BY reviews.product_id", [$cat_id])->fetchAllAssoc();
+                            GROUP BY reviews.product_id, p.id", [$cat_id])->fetchAllAssoc();
     }
 
     public function get($id)
@@ -51,6 +51,24 @@ class Products extends SimpleDB
     public function checkQuantity($id)
     {
         return $this->sql("SELECT quantity FROM products WHERE id = ?", [$id])->fetchRowAssoc()['quantity'];
+    }
+
+    public function add($name, $description, $price, $quantity, $category, $photo)
+    {
+        return $this->sql("INSERT INTO products (name, description, price, quantity, category_id, photo) VALUES (?,?,?,?,?,?)", [$name, $description, $price, $quantity, $category, $photo]);
+    }
+
+    public function edit($id, $name, $description, $price, $quantity, $category, $photo = null)
+    {
+        if($photo != null) {
+            return $this->sql("UPDATE products SET name = ?, description = ?, price = ?, quantity = ?, category_id = ?, photo = ? WHERE id = ?", [$name, $description, $price, $quantity, $category, $photo, $id]);
+        }
+        return $this->sql("UPDATE products SET name = ?, description = ?, price = ?, quantity = ?, category_id = ? WHERE id = ?", [$name, $description, $price, $quantity, $category, $id]);
+    }
+
+    public function delete($id)
+    {
+        return $this->sql("DELETE FROM products WHERE id = ?", [$id]);
     }
 
 }

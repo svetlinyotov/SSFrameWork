@@ -18,6 +18,10 @@ $route->addRoute('post', '/categories/add', 'Products\CategoriesController@add')
 $route->addRoute('post', '/category/{id}', 'Products\CategoriesController@edit');
 $route->addRoute('get', '/category/delete/{id}', 'Products\CategoriesController@delete');
 
+$route->addRoute('post', '/product/add', 'Products\ProductsController@add');
+$route->addRoute('post', '/product/{id}', 'Products\ProductsController@edit');
+$route->addRoute('get', '/product/delete/{id}', 'Products\ProductsController@delete');
+
 $route->addRoute('post', '/review/{product_id}', 'Products\ReviewsController@update');
 
 //$route->addRoute('get', '/cart', 'CartController@index');
