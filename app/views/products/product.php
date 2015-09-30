@@ -33,16 +33,28 @@ use SSFrame\Facades\Auth; use \SSFrame\Form; ?>
         <?php } ?>
 
         <div class="thumbnail">
+            <?php if($promotion) { ?>
+                <h1 class="discount">-<?=$promotion;?>% </h1>
+            <?php } ?>
             <img class="img-responsive" src="http://placehold.it/800x300" alt="">
             <div class="caption-full">
                 <?php if($disabled == null) { ?>
                     <h4 class="pull-right text-right">
                         <span class="label label-default"><?=$product['quantity'];?> left in our store</span><br>
+                        <?php
+                            $price = $product['price'];
+                            $newPrice = round($price * ((100-$promotion) / 100), 2);
+                            $price = "$".$price;
+
+                            if($promotion) {
+                                $price = "<span class='red'>$".$newPrice."</span> <small class='strike'>$".$product['price']."</small>";
+                            }
+                        ?>
                         <?php if(array_key_exists($product['id'], $cart)) { ?>
-                            <a href="<?=asset('/cart/add/'.$product['id']);?>" class="btn btn-info <?=$disabled;?>">Add another one for $<?=$product['price'];?></a><br>
+                            <a href="<?=asset('/cart/add/'.$product['id']);?>" class="btn btn-info <?=$disabled;?>">Add another one for <?=$price;?></a><br>
                             <small>Currently <?=$cart[$product['id']];?> added in cart.</small>
                         <?php }else{ ?>
-                            <a href="<?=asset('/cart/add/'.$product['id']);?>" class="btn btn-info <?=$disabled;?>">Buy for $<?=$product['price'];?></a>
+                            <a href="<?=asset('/cart/add/'.$product['id']);?>" class="btn btn-info <?=$disabled;?>">Buy for $<?=$price;?></a>
                         <?php } ?>
                     </h4>
                 <?php }else{ ?>

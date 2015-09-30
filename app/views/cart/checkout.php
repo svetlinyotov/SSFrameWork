@@ -25,11 +25,19 @@
                 <a href="<?=asset('/products/product/'.$item['id']); ?>"><?=$item['product_name']; ?></a>
                 <br><a href="<?=asset('/products/category/'.$item['category_id']); ?>"><i><?=$item['category_name']; ?></i></a></td>
             <td>
-                <?= $session_cart[$item['id']]; ?>
-                x $<?=$item['price'];?>
+                <?php
+                $price = $item['price'];
+                $newPrice = round($price * ((100-$item['discount']) / 100), 2);
+
+                if($item['discount']){
+                    $price = "<span class='red'>$".$newPrice."</span> <small class='strike'>$".$item['price']."</small>";
+                }
+                ?>
+                <?=$session_cart[$item['id']]; ?>
+                x <?=$price;?>
             </td>
             <td>
-                $<?= $session_cart[$item['id']]*$item['price'];?>
+                $<?= $session_cart[$item['id']]*$newPrice;?>
             </td>
         </tr>
 

@@ -31,11 +31,19 @@
                 <a href="<?=asset('/products/product/'.$item['id']); ?>"><?=$item['product_name']; ?></a>
                 <br><a href="<?=asset('/products/category/'.$item['category_id']); ?>"><i><?=$item['category_name']; ?></i></a></td>
             <td>
+                <?php
+                $price = $item['price'];
+                $newPrice = round($price * ((100-$item['discount']) / 100), 2);
+
+                if($item['discount']){
+                    $price = "<span class='red'>$".$newPrice."</span> <small class='strike'>$".$item['price']."</small>";
+                }
+                ?>
                 <?=Form::number('quantity['.$item['id'].']', $session_cart[$item['id']], null, null, ['class'=>'form-control', 'style'=>'width:60px; display:inline-block']); ?>
-                x $<?=$item['price'];?>
+                x <?=$price;?>
             </td>
             <td>
-                $<?= $session_cart[$item['id']]*$item['price'];?>
+                $<?= $session_cart[$item['id']]*$newPrice;?>
             </td>
             <td class="text-center"><a href="<?=asset('/cart/delete/'.$item['id']); ?>" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a></td>
         </tr>
