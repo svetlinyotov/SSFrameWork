@@ -52,6 +52,27 @@ body {
     color: #333;
 }
 
+.discount {
+    position: absolute;
+    left: 40px;
+    top: 30px;
+    transform: rotateZ(-20deg);
+    font-weight: bold;
+    color: #D17581;
+    text-shadow: 1px 1px 1px #000;
+    font-size: 40pt;
+}
+
+.discount-small {
+    font-size: 26pt;
+    top: -5px;
+    left: 22px;
+}
+
+.strike {
+    text-decoration: line-through;
+}
+
 footer {
     margin: 50px 0;
 }
