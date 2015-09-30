@@ -25,6 +25,8 @@ class CategoriesController extends BaseController
     /**
      * @param \App\Bindings\AddEditCategoryBindingModel $input
      * @param \App\Models\Categories $category
+     * @Authorized('/login')
+     * @UserRole(0,1)
      */
     public function add(AddEditCategoryBindingModel $input, Categories $category)
     {
@@ -37,6 +39,8 @@ class CategoriesController extends BaseController
     /**
      * @param \App\Bindings\AddEditCategoryBindingModel $input
      * @param \App\Models\Categories $category
+     * @Authorized
+     * @UserRole(0)
      */
     public function edit($id, AddEditCategoryBindingModel $input, Categories $category)
     {
@@ -52,6 +56,8 @@ class CategoriesController extends BaseController
 
     /**
      * @param \App\Models\Categories $category
+     * @Authorized
+     * @UserRole(0,1)
      */
     public function delete($id, Categories $category)
     {
