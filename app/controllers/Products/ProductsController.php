@@ -6,6 +6,7 @@ namespace App\Controllers\Products;
 use App\Controllers\BaseController;
 use App\Models\Categories;
 use App\Models\Products;
+use App\Models\Promotions;
 use App\Models\Reviews;
 use SSFrame\Facades\Auth;
 
@@ -20,23 +21,24 @@ class ProductsController extends BaseController
     {
         $cart = $this->session->getSession()->cart?:[''];
         $this->view->appendToLayout('body', "products.products");
-        $this->view->display('layouts.main', ['data'=>$products->listAllFromCat($id), 'cart' => $cart, 'categories'=>$categories->listAllNames()]);
+        $this->view->display('layouts.main', ['data'=>$products->listAllFromCat($id), 'cart' => $cart, 'categories'=>$categories->listAllNames(), 'currentCategory' => $id]);
     }
 
     /**
      * @param \App\Models\Products $products
      * @param \App\Models\Reviews $reviews
      * @param \App\Models\Categories $categories
+     * @param \App\Models\Promotions $promotions
      * @throws \Exception
      */
-    public function getProduct($id, Products $products, Reviews $reviews, Categories $categories)
+    public function getProduct($id, Products $products, Reviews $reviews, Categories $categories, Promotions $promotions)
     {
         $cart = $this->session->getSession()->cart?:[''];
 
         $this->view->appendToLayout('body', "products.product");
 
         //echo "<pre>".print_r($reviews->getForProduct($id),true)."</pre>";
-        $this->view->display('layouts.main', ['product'=>$products->get($id), 'cart' => $cart, 'reviews'=>$reviews->getForProduct($id), 'current_user_review' => $reviews->getForUser(Auth::user()->id, $id),'categories'=>$categories->listAllNames()]);
+        $this->view->display('layouts.main', ['product'=>$products->get($id), 'cart' => $cart, 'promotion'=>$promotions->getProductPromotion($id)?:null, 'reviews'=>$reviews->getForProduct($id), 'current_user_review' => $reviews->getForUser(Auth::user()->id, $id),'categories'=>$categories->listAllNames()]);
     }
 
 
