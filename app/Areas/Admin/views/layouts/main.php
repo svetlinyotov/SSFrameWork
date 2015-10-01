@@ -60,7 +60,7 @@
                     <a href="<?=asset('/admin/users');?>"><i class="fa fa-fw fa-dashboard"></i> Users</a>
                 </li>
                 <li>
-                    <a href="<?=asset('/admin/ban');?>"><i class="fa fa-fw fa-bar-chart-o"></i> IP Ban</a>
+                    <a href="<?=asset('/admin/ban');?>"><i class="fa fa-fw fa-bar-chart-o"></i> Ban IP</a>
                 </li>
             </ul>
         </div>
