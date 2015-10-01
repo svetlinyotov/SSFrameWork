@@ -50,7 +50,7 @@
 
             </div>
 -->
-            <?php if(Auth::user()->role < 3) { ?>
+            <?php if(Auth::user()->role < 3 && Auth::user()) { ?>
                 <a href="" class="btn btn-success" data-toggle="modal" data-target="#cat_add"><i class="glyphicon glyphicon-plus"></i></a>
             <?php } ?>
 
@@ -106,10 +106,10 @@
                     </div>
 
                     <div>
-                        <?php if(Auth::user()->role == 0) { ?>
+                        <?php if(Auth::user()->role == 0 && Auth::user()) { ?>
                             <a href="#cat_edit" class="btn btn-warning" data-id="<?=$item['id'];?>" data-title="<?=$item['name'];?>" data-description="<?=$item['description'];?>" data-price="<?=$item['price'];?>" data-quantity="<?=$item['quantity'];?>"  data-category="<?=$item['category_id'];?>" data-toggle="modal" data-target="#cat_edit"><i class="glyphicon glyphicon-pencil"></i></a>
                         <?php } ?>
-                        <?php if(Auth::user()->role < 3) { ?>
+                        <?php if(Auth::user()->role < 3 && Auth::user()) { ?>
                             <a href="#cat_delete" class="btn btn-danger" data-toggle="modal" data-id="<?=$item['id'];?>" data-target="#cat_delete"><i class="glyphicon glyphicon-trash"></i></a>
                         <?php } ?>
                     </div>
@@ -128,7 +128,7 @@
 
 
 
-<?php if(Auth::user()->role < 3) { ?>
+<?php if(Auth::user()->role < 3 && Auth::user()) { ?>
     <div class="modal fade" id="cat_add" tabindex="-1" role="dialog" aria-labelledby="cat_add">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -174,7 +174,7 @@
     </div>
 <?php } ?>
 
-<?php if(Auth::user()->role == 0) { ?>
+<?php if(Auth::user()->role == 0 && Auth::user()) { ?>
     <div class="modal fade" id="cat_edit" tabindex="-1" role="dialog" aria-labelledby="cat_edit">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -220,7 +220,7 @@
     </div>
 <?php } ?>
 
-<?php if(Auth::user()->role < 3) { ?>
+<?php if(Auth::user()->role < 3 && Auth::user()) { ?>
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="cat_delete" aria-labelledby="cat_delete">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -234,7 +234,7 @@
     </div>
 <?php } ?>
 
-<?php if(Auth::user()->role < 3) { ?>
+<?php if(Auth::user()->role < 3 && Auth::user()) { ?>
     <script type="text/javascript">
         $('#cat_edit').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
