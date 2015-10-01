@@ -13,13 +13,15 @@
 
     <title>My Shop</title>
 
-    <!-- Bootstrap Core CSS -->
     <link href="<?=asset('/css/bootstrap.min.css');?>" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link href="<?=asset('/css/shop-homepage.css');?>" rel="stylesheet">
 
+    <link href="<?=asset('/css/jquery-ui.min.css');?>" rel="stylesheet">
+    <link href="<?=asset('/css/jquery-ui.structure.min.css');?>" rel="stylesheet">
+    <link href="<?=asset('/css/jquery-ui.theme.min.css');?>" rel="stylesheet">
+
     <script src="<?= asset('/js/jquery.js');?>"></script>
+    <script src="<?= asset('/js/jquery-ui.min.js');?>"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

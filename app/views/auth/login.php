@@ -24,11 +24,8 @@
                             <?=Form::email('email', $input['email'], ['class'=>'form-control', 'id'=>'email', 'placeholder'=>'Enter email']); ?>
                         </div>
                         <div class="form-group">
-                            <?=Form::label('password', 'Password'); ?><a href="/sessions/forgot_password">(forgot password)</a>
+                            <?=Form::label('password', 'Password'); ?>
                             <?=Form::password('password', ['class'=>'form-control', 'id'=>'password', 'placeholder'=>'Password']); ?>
-                        </div>
-                        <div class="form-group">
-                            <?=Form::checkbox('remember', 1); ?> Remember me
                         </div>
                         <?=Form::submit('', 'Sign in', ['class' => 'btn btn-sm btn-default']); ?>
                     <?=Form::close();?>
