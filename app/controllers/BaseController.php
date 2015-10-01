@@ -3,24 +3,10 @@
 namespace App\Controllers;
 
 
-use SSFrame\Sessions\Session;
-use SSFrame\View;
+use SSFrame\DefaultController;
 
-class BaseController
+class BaseController extends DefaultController
 {
 
-    /**
-     * @var View
-     */
-    public $view;
-    /**
-     * @var Session
-     */
-    public $session;
 
-    public function __construct()
-    {
-        $this->view = View::getInstance();
-        $this->session = Session::getInstance();
-    }
 }

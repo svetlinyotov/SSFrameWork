@@ -25,14 +25,10 @@ $route->addRoute('post', '/products/sort', 'Products\ProductsController@sort');
 
 $route->addRoute('post', '/review/{product_id}', 'Products\ReviewsController@update');
 
-//$route->addRoute('get', '/cart', 'CartController@index');
-//$route->addRoute('get', '/cart/add/{product_id}', 'CartController@add');
-
 //Areas
-/*
+
 $route->area(['name'=>'admin', 'prefix'=>'/admin'],
     [
-        ['get', '/', 'CategoriesController@index'],
-        ['get', '/category/{id}', 'CategoriesController@index'],
+        ['get', '/', 'AdminController@index'],
     ]
-);*/
+);
