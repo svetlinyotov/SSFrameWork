@@ -29,8 +29,11 @@ $route->addRoute('post', '/review/{product_id}', 'Products\ReviewsController@upd
 
 $route->area(['name'=>'admin', 'prefix'=>'/admin'],
     [
-        ['get', '/', 'AdminController@index'],
-        ['get', '/users', 'AdminController@index'],
-        ['get', '/ban', 'AdminController@banIndex'],
+        ['get', '/', 'UsersController@index'],
+        ['get', '/users', 'UsersController@index'],
+
+        ['get', '/ban', 'BanController@index'],
+        ['get', '/ban/delete/{id}', 'BanController@destroy'],
+        ['post', '/ban/add', 'BanController@create'],
     ]
 );
