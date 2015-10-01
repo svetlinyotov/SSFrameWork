@@ -54,7 +54,7 @@
                 <a href="" class="btn btn-success" data-toggle="modal" data-target="#cat_add"><i class="glyphicon glyphicon-plus"></i></a>
             <?php } ?>
 
-            <div class="row">
+            <div class="row" id="sortable">
             <?php
                 foreach ($data as $item) {
 
@@ -67,7 +67,7 @@
                     }
             ?>
 
-            <div class="col-sm-4 col-lg-4 col-md-4">
+            <div class="col-sm-4 col-lg-4 col-md-4" id="product-<?=$item['id'];?>">
                 <div class="thumbnail">
                     <?php if($promotion) { ?>
                         <h1 class="discount discount-small">-<?=$promotion;?>% </h1>
@@ -260,6 +260,21 @@
 
             var modal = $(this);
             modal.find('#delete_button').attr('href', '<?=asset('/admin/product/delete');?>/' + id);
+        });
+
+        $(function() {
+            $( "#sortable" ).sortable({
+                update: function (event, ui) {
+                    var data = $(this).sortable('serialize');
+                    data+="&csrf_token=<?= \SSFrame\CSRF::getInstance()->token();?>";
+
+                    $.ajax({
+                        data: data,
+                        type: 'POST',
+                        url: '<?=asset("/products/sort");?>'
+                    });
+                }
+            });
         });
     </script>
 <?php } ?>

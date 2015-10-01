@@ -22,7 +22,8 @@ class Products extends SimpleDB
                             FROM products AS p
                             LEFT JOIN reviews ON reviews.product_id = p.id
                             WHERE p.category_id = ? AND is_available = 1 AND quantity > 0
-                            GROUP BY reviews.product_id, p.id", [$cat_id])->fetchAllAssoc();
+                            GROUP BY reviews.product_id, p.id
+                            ORDER BY p.position", [$cat_id])->fetchAllAssoc();
     }
 
     public function get($id)
@@ -70,5 +71,11 @@ class Products extends SimpleDB
     {
         return $this->sql("DELETE FROM products WHERE id = ?", [$id]);
     }
+
+    public function updateSort($product_id, $position)
+    {
+        return $this->sql("UPDATE products SET `position` = ? WHERE id = ?", [$position, $product_id]);
+    }
+
 
 }

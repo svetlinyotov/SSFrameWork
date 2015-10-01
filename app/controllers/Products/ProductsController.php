@@ -4,6 +4,7 @@ namespace App\Controllers\Products;
 
 
 use App\Bindings\AddEditProductBindingModel;
+use App\Bindings\SortProductsBindingModel;
 use App\Controllers\BaseController;
 use App\Models\Categories;
 use App\Models\Products;
@@ -87,6 +88,19 @@ class ProductsController extends BaseController
     {
         $product->delete($id);
         Redirect::to('back')->go();
+    }
+
+    /**
+     * @param \App\Bindings\SortProductsBindingModel $input
+     * @param \App\Models\Products $product
+     * @Authorized
+     * @UserRole(0,1)
+     */
+    public function sort(SortProductsBindingModel $input, Products $product)
+    {
+        foreach($input->getProduct() as $position=>$product_id) {
+            $product->updateSort($product_id, $position);
+        }
     }
 
 

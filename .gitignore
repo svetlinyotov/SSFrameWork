@@ -1,3 +1,5 @@
 .env
 .git
 .idea
+/public/user_data
+public/error_log

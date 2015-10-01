@@ -21,6 +21,7 @@ $route->addRoute('get', '/category/delete/{id}', 'Products\CategoriesController@
 $route->addRoute('post', '/product/add', 'Products\ProductsController@add');
 $route->addRoute('post', '/product/{id}', 'Products\ProductsController@edit');
 $route->addRoute('get', '/product/delete/{id}', 'Products\ProductsController@delete');
+$route->addRoute('post', '/products/sort', 'Products\ProductsController@sort');
 
 $route->addRoute('post', '/review/{product_id}', 'Products\ReviewsController@update');
 

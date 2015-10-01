@@ -67,11 +67,15 @@ class Auth extends SimpleDB
         return null;
     }
 
+    /**
+     * @Authorized
+     */
     public function logout()
     {
         $this->sql("UPDATE users SET access_token= '' WHERE id = ?", [ $this->user()->id]);
         Session::getInstance()->getSession()->unsetKey('user_token');
-        Redirect::to('/home')->go();
+
+        Redirect::to('/')->go();
     }
 
     public function user()

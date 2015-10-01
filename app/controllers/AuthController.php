@@ -77,14 +77,4 @@ class AuthController extends \SSFrame\Auth
         }
     }
 
-    /**
-     * Only for testing
-     * @Authorized
-     * @UserRole(1 , 2 , 0, 3 )
-     */
-    public function profile()
-    {
-        return "asdasd";
-    }
-
 }
