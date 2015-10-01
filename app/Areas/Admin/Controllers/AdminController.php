@@ -10,7 +10,13 @@ class AdminController extends DefaultController
 {
     public function index()
     {
-        //View::appendToLayout('body', "auth.login");
+        View::appendToLayout('body', "users");
+        View::display('layouts.main');
+    }
+
+    public function banIndex()
+    {
+        View::appendToLayout('body', "ban");
         View::display('layouts.main');
     }
 
