@@ -11,7 +11,7 @@
 
     <title>SB Admin - Bootstrap Admin Template</title>
 
-    <link href="<?=asset('/admin/css/bootstrap.min.css');?>" rel="stylesheet">
+    <link href="<?=asset('/css/bootstrap.min.css');?>" rel="stylesheet">
     <link href="<?=asset('/admin/css/sb-admin.css');?>" rel="stylesheet">
     <link href="<?=asset('/admin/font-awesome/css/font-awesome.min.css');?>" rel="stylesheet" type="text/css">
 

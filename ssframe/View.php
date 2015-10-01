@@ -25,11 +25,11 @@ class View
         $current_controller = FrontController::getInstance()->getRouter()->controller.'Controller';
         if(class_exists($current_controller)) {
             $reflection = new \ReflectionClass($current_controller);
-            $view_path = __DIR__."/../".str_replace("\\", DIRECTORY_SEPARATOR, lcfirst($reflection->getNamespaceName())) . "/../views";
+            $view_path = $_SERVER['DOCUMENT_ROOT']."/../".str_replace("\\", DIRECTORY_SEPARATOR, lcfirst($reflection->getNamespaceName())) . "/../views";
 
             if(is_dir($view_path) && is_readable($view_path)) {
 
-                $this->viewPath = (config("app.namespaces")["App"] . '/../' . $view_path);
+                $this->viewPath = realpath($view_path);
             }else{
                 $this->viewPath = config("app.views_default_path");
             }
@@ -46,7 +46,8 @@ class View
     public function setViewDirectory($path) {
         $path = trim($path);
         if ($path) {
-            $path = realpath($path) . DIRECTORY_SEPARATOR;
+            $path = ($path) . DIRECTORY_SEPARATOR;
+            //var_dump($path);
             if (is_dir($path) && is_readable($path)) {
                 $this->viewDir = $path;
             } else {
