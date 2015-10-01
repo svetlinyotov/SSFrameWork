@@ -7,12 +7,12 @@ return [
 
     'controller_default_namespace' => 'App',
 
-    'router_default_path' => __DIR__.'\..\router.php', //used only for
+    'router_default_path' => __DIR__.'/../router.php', //used only for
 
-    'views_default_path' => __DIR__.'\..\views',
+    'views_default_path' => __DIR__.'/../views',
 
     'namespaces' => [
-        'App' => __DIR__.'\..',
+        'App' => __DIR__.'/..',
     ],
 
 ];

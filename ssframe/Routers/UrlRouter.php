@@ -24,7 +24,7 @@ class UrlRouter implements RouterInterface {
 
     public function __construct()
     {
-        $this->controller = config("app.controller_default_namespace") . "\\controllers\\" . "Home";
+        $this->controller = config("app.controller_default_namespace") . "\\Controllers\\" . "Home";
     }
 
     public function getURI($method = null) {
@@ -35,7 +35,7 @@ class UrlRouter implements RouterInterface {
         $data = array_values(array_filter($data));
 
         if($data[0]){
-            $this->controller = config("app.controller_default_namespace") . "\\controllers\\" . ucfirst($data[0]);
+            $this->controller = config("app.controller_default_namespace") . "\\Controllers\\" . ucfirst($data[0]);
             unset($data[0]);
         }
         if($data[1]){

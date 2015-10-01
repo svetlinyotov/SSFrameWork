@@ -33,7 +33,7 @@ class App {
     private function __construct() {
         set_exception_handler([$this, '_exceptionHandler']);
         Loader::envParser();
-        Loader::registerNamespace('SSFrame', dirname(__DIR__).'/SSFrame');
+        Loader::registerNamespace('SSFrame', dirname(__DIR__).'/ssframe/');
         Loader::registerAutoLoad();
         Config::getInstance()->setConfigFolder(Loader::env("CONFIG_DIR"));
         Loader::registerNamespaces(Config::getInstance()->get('app.namespaces'));

@@ -47,7 +47,7 @@ class Route implements RouterInterface {
     {
         $method = (array)$method;
         if(!$area) {
-            $action = config("app.controller_default_namespace") . "\\controllers\\" . $action;
+            $action = config("app.controller_default_namespace") . "\\Controllers\\" . $action;
         }
 
         if (array_diff($method, $this->allowedMethods)) {
@@ -232,7 +232,7 @@ class Route implements RouterInterface {
                 }
             }
 
-            $this->addRoute($route[0], $_route, config("app.controller_default_namespace") . "\\Areas\\".ucfirst($name)."\\controllers\\".$route[2], true);
+            $this->addRoute($route[0], $_route, config("app.controller_default_namespace") . "\\Areas\\".ucfirst($name)."\\Controllers\\".$route[2], true);
         }
 
     }
