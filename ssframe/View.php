@@ -94,7 +94,7 @@ class View
         if ($this->viewDir == null) {
             $this->setViewDirectory($this->viewPath);
         }
-var_dump($this->viewDir);
+
         $fl = $this->viewDir . str_replace('.', DIRECTORY_SEPARATOR, $file) . $this->extension;
         if (file_exists($fl) && is_readable($fl)) {
             //ob_start();
