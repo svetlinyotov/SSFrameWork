@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Bootstrap Admin Template</title>
+    <title>My Shop ADMIN</title>
 
     <link href="<?=asset('/css/bootstrap.min.css');?>" rel="stylesheet">
     <link href="<?=asset('/css/sb-admin.css');?>" rel="stylesheet">
