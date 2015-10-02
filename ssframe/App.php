@@ -18,6 +18,7 @@ namespace SSFrame;
 
 include_once "Loader.php";
 
+use SSFrame\DB\SimpleDB;
 use SSFrame\Facades\Auth;
 use SSFrame\Routers\Route;
 use SSFrame\Sessions\Session;
@@ -50,6 +51,13 @@ class App {
 
 
     public function run() {
+        $db = new SimpleDB();
+        $list = $db->sql("SELECT * FROM ban_ip")->fetchAllAssoc();
+        foreach ($list as $ip) {
+            if($_SERVER['REMOTE_ADDR'] == $ip['ip']){
+                throw new \Exception("Currently your IP is blocked by admin");
+            }
+        }
 
         CSRF::getInstance()->generate();
         Auth::doAuth();
