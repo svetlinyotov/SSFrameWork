@@ -23,7 +23,7 @@ class Auth extends SimpleDB
     public function make($email, $password, $remember = false)
     {
 
-        $user = $this->sql("SELECT * FROM users WHERE email = ?", [$email]);
+        $user = $this->sql("SELECT * FROM users WHERE email = ? AND is_ban = 0", [$email]);
 
         if($user->getAffectedRows() == 1){
             $user = $user->fetchRowAssoc();
