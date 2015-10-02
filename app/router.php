@@ -35,5 +35,9 @@ $route->area(['name'=>'admin', 'prefix'=>'/admin'],
         ['get', '/ban', 'BanController@index'],
         ['get', '/ban/delete/{id}', 'BanController@destroy'],
         ['post', '/ban/add', 'BanController@create'],
+
+        ['get', '/users', 'UsersController@index'],
+        ['get', '/user/delete/{id}', 'UsersController@destroy'],
+        ['post', '/users/add', 'UsersController@create'],
     ]
 );
