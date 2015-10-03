@@ -53,7 +53,7 @@ class Annotations
     {
         if(\SSFrame\Facades\Auth::user() == true) {
             $roles = array_map('trim', explode(",", $id));
-            $current_role = \SSFrame\Facades\Auth::user()->role;
+            $current_role = \SSFrame\Facades\Auth::user()->role-1;
 
             if (array_search($current_role, $roles) === false) {
                 throw new \Exception("Current user's role not authorized", 402);
