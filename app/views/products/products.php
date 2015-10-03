@@ -251,7 +251,7 @@
             modal.find('#input-quantity').val(quantity);
             modal.find('#input-description').val(description);
             modal.find('#input-category option[value='+category+']').prop('selected', true);
-            modal.find('form').attr('action', '<?=asset('/admin/product');?>/' + id);
+            modal.find('form').attr('action', '<?=asset('/product');?>/' + id);
         });
 
         $('#cat_delete').on('show.bs.modal', function (event) {
@@ -259,7 +259,7 @@
             var id = button.data('id');
 
             var modal = $(this);
-            modal.find('#delete_button').attr('href', '<?=asset('/admin/product/delete');?>/' + id);
+            modal.find('#delete_button').attr('href', '<?=asset('/product/delete');?>/' + id);
         });
 
         $(function() {

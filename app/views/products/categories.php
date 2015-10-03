@@ -136,7 +136,7 @@
         var modal = $(this);
         modal.find('#input-title').val(title);
         modal.find('#input-description').val(description);
-        modal.find('form').attr('action', '<?=asset('/admin/category');?>/' + id);
+        modal.find('form').attr('action', '<?=asset('/category');?>/' + id);
     });
 
     $('#cat_delete').on('show.bs.modal', function (event) {
@@ -144,7 +144,7 @@
         var id = button.data('id');
 
         var modal = $(this);
-        modal.find('#delete_button').attr('href', '<?=asset('/admin/category/delete');?>/' + id);
+        modal.find('#delete_button').attr('href', '<?=asset('/category/delete');?>/' + id);
     });
 </script>
 <?php } ?>
