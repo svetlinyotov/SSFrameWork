@@ -36,7 +36,11 @@ use SSFrame\Facades\Auth; use \SSFrame\Form; ?>
             <?php if($promotion) { ?>
                 <h1 class="discount">-<?=$promotion;?>% </h1>
             <?php } ?>
-            <img class="img-responsive" src="http://placehold.it/800x300" alt="">
+            <?php if($product['photo'] != "") { ?>
+                <img src="<?= asset('/user_data/products/'.$product['photo'])?>" alt="">
+            <?php }else{ ?>
+                <img src="http://placehold.it/800x300" alt="">
+            <?php } ?>
             <div class="caption-full">
                 <?php if($disabled == null) { ?>
                     <h4 class="pull-right text-right">
