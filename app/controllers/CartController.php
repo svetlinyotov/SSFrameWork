@@ -51,6 +51,15 @@ class CartController extends BaseController
         Redirect::to("back")->go();
     }
 
+    public function delete($id)
+    {
+        $temp = $this->session->getSession()->cart;
+        unset ($temp[$id]);
+
+        $this->session->getSession()->cart = $temp;
+        Redirect::to("back")->go();
+    }
+
     /**
      * @param \App\Bindings\UpdateCartBindingModel $input
      * @param \App\Models\Products $product
