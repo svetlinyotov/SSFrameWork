@@ -39,6 +39,8 @@ class BindingModel extends InputData
                 if(is_array($value)){
                     $obj->{$var} = array_map('trim',$value);
                 }else {
+					//$setter = 'set'.$var;
+					//$obj->$setter($value);
                     $obj->{$var} = trim($value);
                 }
             }else{

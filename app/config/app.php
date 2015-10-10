@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'displayExceptions' => true,
+    'displayExceptions' => false,
 
     'second_step_routing' => true, //if enabled and no route in routes.php is found, then default routing will be used site.com/controller/method/param1/param2/....
 

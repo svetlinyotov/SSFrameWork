@@ -123,7 +123,7 @@
 
     </div>
 </div>
-<?php } ?>
+<?php } ?> 
 
 <?php if(Auth::user()->role < 3 && Auth::user()) { ?>
 <script type="text/javascript">
