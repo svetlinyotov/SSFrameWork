@@ -126,33 +126,16 @@ class FrontController {
         $newController = new $file();
 
         $method = new ReflectionMethod($newController, $this -> method);
-        $number_of_params_expected = $method->getNumberOfParameters();
         $annotations = $method->getDocComment();
-        $unbindModels = [];
 
-        if (preg_match_all('/@param\s+([^\s]+)/', $method->getDocComment(), $matches)) {
-
-            foreach ($matches[1] as $param) {
-                if(class_exists($param)) {
-                    array_push($unbindModels, $param);
-                }
-            }
-        }
-
-        if(count($this->params) < $number_of_params_expected){
-            $difference = $number_of_params_expected - count($this->params);
-
-            for($i = 1; $i <= $difference; $i++){
-                if(isset($unbindModels[$i-1])) {
-                    $this->params[] = new $unbindModels[$i - 1]();
-                }else{
-                    $this->params[] = null;
-                }
+        foreach ($method->getParameters() as $param) {
+            $param = $param->getClass()->name;
+            if(class_exists($param)) {
+                $this->params[] = new $param();
             }
         }
 
         Annotations::getInstance($annotations);
-
 
         call_user_func_array(array($newController, $this->method), $this->params);
 

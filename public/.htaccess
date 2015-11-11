@@ -6,12 +6,11 @@
     RewriteEngine On
 
     # Redirect Trailing Slashes...
-    RewriteRule ^(.*)/$ /index.php/$1 [L,R=301]
+    RewriteRule ^(.*)/$ /SSFrameWork/public/index.php/$1 [L,R=301]
 
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
 </IfModule>
 
 Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"

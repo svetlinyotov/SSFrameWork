@@ -6,14 +6,16 @@ namespace App\Controllers\Products;
 use App\Bindings\AddEditCategoryBindingModel;
 use App\Controllers\BaseController;
 use App\Models\Categories;
-use SSFrame\Facades\Redirect;
+use SSFrame\BindingModel;
 use SSFrame\Files\FileUpload;
+use SSFrame\InputData;
+use SSFrame\Request;
 
 class CategoriesController extends BaseController
 {
 
     /**
-     * @param \App\Models\Categories $categories
+     * @param Categories $categories
      */
     public function index(Categories $categories)
     {
@@ -23,17 +25,18 @@ class CategoriesController extends BaseController
 
 
     /**
-     * @param \App\Bindings\AddEditCategoryBindingModel $input
-     * @param \App\Models\Categories $category
+     * @param AddEditCategoryBindingModel $input
+     * @param Categories $category
      * @Authorized('/login')
      * @UserRole(0,1)
      */
     public function add(AddEditCategoryBindingModel $input, Categories $category)
     {
+        //return var_dump($input->post('title'));
         $file_name = time().rand(100,999);
         $file = FileUpload::postImage($_FILES['photo'], $file_name, __DIR__.'/../../../public/user_data/categories', false, 300);
         $category->add($input->title, $input->description, $file);
-        Redirect::to('/products')->go();
+        $this->redirect->to('/products')->go();
     }
 
     /**
@@ -51,7 +54,7 @@ class CategoriesController extends BaseController
         }
 
         $category->edit($id, $input->title, $input->description, $file);
-        Redirect::to('/products')->go();
+        $this->redirect->to('/products')->go();
     }
 
     /**
@@ -62,6 +65,6 @@ class CategoriesController extends BaseController
     public function delete($id, Categories $category)
     {
         $category->delete($id);
-        Redirect::to('/products')->go();
+        $this->redirect->to('/products')->go();
     }
 }

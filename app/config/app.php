@@ -1,9 +1,11 @@
 <?php
 
 return [
-    'displayExceptions' => false,
+    'displayExceptions' => true,
 
     'second_step_routing' => true, //if enabled and no route in routes.php is found, then default routing will be used site.com/controller/method/param1/param2/....
+
+    'real_url' => 'http://localhost/SSFrameWork/public',
 
     'controller_default_namespace' => 'App',
 

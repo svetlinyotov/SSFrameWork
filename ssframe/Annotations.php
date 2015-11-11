@@ -2,8 +2,6 @@
 
 namespace SSFrame;
 
-use SSFrame\Facades\Redirect;
-
 
 class Annotations
 {
@@ -32,18 +30,18 @@ class Annotations
     }
 
     public function unauthorized($url){
-        if(\SSFrame\Facades\Auth::user() == true){
+        if(Auth::getInstance()->user() == true){
             if(strlen($url) > 0) {
-                Redirect::to($url)->go();
+                Redirect::getInstance()->to($url)->go();
             }
             throw new \Exception("Accessing method forbidden", 402);
         }
     }
 
     public function authorized($url){
-        if(\SSFrame\Facades\Auth::user() == false){
+        if(Auth::getInstance()->user() == false){
             if(strlen($url) > 0) {
-                Redirect::to($url)->go();
+                Redirect::getInstance()->to($url)->go();
             }
             throw new \Exception("Accessing method forbidden", 402);
         }
@@ -51,9 +49,9 @@ class Annotations
 
     public function userRole($id)
     {
-        if(\SSFrame\Facades\Auth::user() == true) {
+        if(Auth::getInstance()->user() == true) {
             $roles = array_map('trim', explode(",", $id));
-            $current_role = \SSFrame\Facades\Auth::user()->role;
+            $current_role = Auth::getInstance()->user()->role;
 
             if (array_search($current_role, $roles) === false) {
                 throw new \Exception("Current user's role not authorized", 401);

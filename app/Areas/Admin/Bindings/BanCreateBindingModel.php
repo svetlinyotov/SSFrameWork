@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Areas\Admin\Bindings;
+namespace App\Areas\Admin\Bindings;
 
 
 use SSFrame\BindingModel;

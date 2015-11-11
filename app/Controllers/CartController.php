@@ -3,14 +3,10 @@
 namespace App\Controllers;
 
 
-use app\bindings\CheckOutBindingModel;
+use App\Bindings\CheckOutBindingModel;
 use App\Bindings\UpdateCartBindingModel;
 use App\Models\Cart;
 use App\Models\Products;
-use SSFrame\Facades\Auth;
-use SSFrame\Facades\Redirect;
-use SSFrame\Facades\Validation;
-use SSFrame\Facades\View;
 
 class CartController extends BaseController
 {
@@ -21,19 +17,19 @@ class CartController extends BaseController
         $this->cart_session = $this->session->getSession()->cart;
     }
     /**
-     * @param \App\Models\Cart $cart
+     * @param Cart $cart
      */
     public function index(Cart $cart)
     {
         $list = $cart->listProducts($this->session->getSession()->cart);
 
-        View::appendToLayout('body', "cart.cart");
-        View::display('layouts.main', ['items' => $list, 'session_cart' => $this->session->getSession()->cart]);
+        $this->view->appendToLayout('body', "cart.cart");
+        $this->view->display('layouts.main', ['items' => $list, 'session_cart' => $this->session->getSession()->cart]);
     }
 
     /**
      * @param $product_id
-     * @param \App\Models\Products $product
+     * @param Products $product
      */
     public function add($product_id, Products $product)
     {
@@ -48,7 +44,7 @@ class CartController extends BaseController
             }
         }
 
-        Redirect::to("back")->go();
+        $this->redirect->back()->go();
     }
 
     public function delete($id)
@@ -57,12 +53,12 @@ class CartController extends BaseController
         unset ($temp[$id]);
 
         $this->session->getSession()->cart = $temp;
-        Redirect::to("back")->go();
+        $this->redirect->back()->go();
     }
 
     /**
-     * @param \App\Bindings\UpdateCartBindingModel $input
-     * @param \App\Models\Products $product
+     * @param UpdateCartBindingModel $input
+     * @param Products $product
      */
     public function update(UpdateCartBindingModel $input, Products $product)
     {
@@ -75,17 +71,17 @@ class CartController extends BaseController
         }
 
         if(count($errors) > 0) {
-            Redirect::to('/cart')->withErrors($errors)->go();
+            $this->redirect->to('/cart')->withErrors($errors)->go();
         }else {
             $this->session->getSession()->cart = $input->getQuantity();
         }
-        Redirect::to('/cart')->go();
+        $this->redirect->to('/cart')->go();
     }
 
     public function emptyCart()
     {
         $this->session->getSession()->unsetKey('cart');
-        Redirect::to('/cart')->go();
+        $this->redirect->to('/cart')->go();
     }
 
     /**
@@ -96,31 +92,31 @@ class CartController extends BaseController
     {
         $list = $cart->listProducts($this->session->getSession()->cart);
 
-        View::appendToLayout('body', "cart.checkout");
-        View::display('layouts.main', ['items' => $list, 'session_cart' => $this->session->getSession()->cart]);
+        $this->view->appendToLayout('body', "cart.checkout");
+        $this->view->display('layouts.main', ['items' => $list, 'session_cart' => $this->session->getSession()->cart]);
     }
 
     /**
      * @Authorized('/login')
-     * @param \App\Bindings\CheckOutBindingModel $input
-     * @param \App\Models\Cart $cart
+     * @param CheckOutBindingModel $input
+     * @param Cart $cart
      */
     public function doCheckout(CheckOutBindingModel $input, Cart $cart)
     {
-        Validation::validate($input, [
+        $this->validation->validate($input, [
             'names' => 'required|min:5',
             'email' => 'required|min:5|email',
             'mobile' => 'required',
             'address' => 'required',
         ]);
 
-        if(Validation::getErrors() == false){
+        if($this->validation->getErrors() == false){
             $cart->checkout($input->names, $input->email, $input->mobile, $input->address);
             $this->emptyCart();
-            return Redirect::to('/products')->withSuccess("You have sent your order successfully.")->go();
+            return $this->redirect->to('/products')->withSuccess("You have sent your order successfully.")->go();
         }
 
-        Redirect::to('/cart/checkout')->withErrors(Validation::getErrors())->withInput($input)->go();
+        $this->redirect->to('/cart/checkout')->withErrors($this->validation->getErrors())->withInput($input)->go();
     }
 
 }

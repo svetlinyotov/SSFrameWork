@@ -33,6 +33,9 @@
 
 <body>
 
+<?php
+//echo "<pre>".print_r(get_defined_vars(), true)."</pre>";
+?>
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -69,6 +72,7 @@
         </div>
     </div>
 </nav>
+
 
 <div class="container">
     <?=View::getLayoutData('body');?>

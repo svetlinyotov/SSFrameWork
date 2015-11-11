@@ -28,9 +28,9 @@ class UrlRouter implements RouterInterface {
     }
 
     public function getURI($method = null) {
-        //$uri = substr($_SERVER['PHP_SELF'], strlen($_SERVER['SCRIPT_NAME']) + 1);
-        $uri = $_SERVER['REQUEST_URI'];
-
+        $uri = substr($_SERVER['PHP_SELF'], strlen($_SERVER['SCRIPT_NAME']) + 1);
+        //$uri = $_SERVER['REQUEST_URI'return var_dump($_SERVER['SCRIPT_NAME']);
+        echo var_dump($_SERVER['PHP_SELF']);
         $data = explode('/', $uri);
         $data = array_values(array_filter($data));
 

@@ -12,38 +12,38 @@ use SSFrame\Facades\View;
 class UsersController extends BaseController
 {
     /**
-     * @param \App\Areas\Admin\Models\Users $user/**
+     * @param Users $user
      * @Authorized
      * @UserRole(0)
      */
     public function index(Users $user)
     {
-        View::appendToLayout('body', "users");
-        View::display('layouts.main', ['users'=>$user->listAll()]);
+        $this->view->appendToLayout('body', "users");
+        $this->view->display('layouts.main', ['users'=>$user->listAll()]);
     }
 
     /**
-     * @param \App\Areas\Admin\Models\Users $user
-     * @param \App\Areas\Admin\Bindings\BanUserBindingModel $input
+     * @param Users $user
+     * @param BanUserBindingModel $input
      * @Authorized
      * @UserRole(0)
      */
     public function create(Users $user, BanUserBindingModel $input)
     {
         $user->add($input->email);
-        Redirect::to('back')->go();
+        $this->redirect->back()->go();
     }
 
     /**
      * @param $id
-     * @param \App\Areas\Admin\Models\Users $user
+     * @param Users $user
      * @Authorized
      * @UserRole(0)
      */
     public function destroy($id, Users $user)
     {
         $user->delete($id);
-        Redirect::to('back')->go();
+        $this->redirect->back()->go();
     }
 
 }

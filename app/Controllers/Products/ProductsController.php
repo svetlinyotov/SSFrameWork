@@ -10,15 +10,14 @@ use App\Models\Categories;
 use App\Models\Products;
 use App\Models\Promotions;
 use App\Models\Reviews;
-use SSFrame\Facades\Auth;
-use SSFrame\Facades\Redirect;
 use SSFrame\Files\FileUpload;
 
 class ProductsController extends BaseController
 {
     /**
-     * @param \App\Models\Products $products
-     * @param \App\Models\Categories $categories
+     * @param $id
+     * @param Products $products
+     * @param Categories $categories
      * @throws \Exception
      */
     public function listAll($id, Products $products, Categories $categories)
@@ -30,10 +29,11 @@ class ProductsController extends BaseController
     }
 
     /**
-     * @param \App\Models\Products $products
-     * @param \App\Models\Reviews $reviews
-     * @param \App\Models\Categories $categories
-     * @param \App\Models\Promotions $promotions
+     * @param $id
+     * @param Products $products
+     * @param Reviews $reviews
+     * @param Categories $categories
+     * @param Promotions $promotions
      * @throws \Exception
      */
     public function getProduct($id, Products $products, Reviews $reviews, Categories $categories, Promotions $promotions)
@@ -42,28 +42,28 @@ class ProductsController extends BaseController
 
         $this->view->appendToLayout('body', "products.product");
 
-        $this->view->display('layouts.main', ['product'=>$products->get($id), 'cart' => $cart, 'promotion'=>$promotions->getProductPromotion($id)?:null, 'reviews'=>$reviews->getForProduct($id), 'current_user_review' => $reviews->getForUser(Auth::user()->id, $id),'categories'=>$categories->listAllNames()]);
+        $this->view->display('layouts.main', ['product'=>$products->get($id), 'cart' => $cart, 'promotion'=>$promotions->getProductPromotion($id)?:null, 'reviews'=>$reviews->getForProduct($id), 'current_user_review' => $reviews->getForUser($this->auth->user()->id, $id),'categories'=>$categories->listAllNames()]);
     }
 
 
     /**
-     * @param \App\Bindings\AddEditProductBindingModel $input
-     * @param \App\Models\Products $product
      * @Authorized('/login')
      * @UserRole(0,1)
+     * @param AddEditProductBindingModel $input
+     * @param Products $product
      */
     public function add(AddEditProductBindingModel $input, Products $product)
     {
         $file_name = time().rand(100,999);
         $file = FileUpload::postImage($_FILES['photo'], $file_name, __DIR__.'/../../../public/user_data/products', false, 300);
         $product->add($input->title, $input->description, $input->price, $input->quantity, $input->category, $file);
-        Redirect::to('back')->go();
+        $this->redirect->back()->go();
     }
 
     /**
      * @param $id
-     * @param \App\Bindings\AddEditProductBindingModel $input
-     * @param \App\Models\Products $product
+     * @param AddEditProductBindingModel $input
+     * @param Products $product
      * @Authorized
      * @UserRole(0)
      */
@@ -76,25 +76,26 @@ class ProductsController extends BaseController
         }
 
         $product->edit($id, $input->title, $input->description, $input->price, $input->quantity, $input->category, $file);
-        Redirect::to('back')->go();
+        $this->redirect->back()->go();
     }
 
     /**
-     * @param \App\Models\Products $product
+     * @param $id
+     * @param Products $product
      * @Authorized
      * @UserRole(0,1)
      */
     public function delete($id, Products $product)
     {
         $product->delete($id);
-        Redirect::to('back')->go();
+        $this->redirect->back()->go();
     }
 
     /**
-     * @param \App\Bindings\SortProductsBindingModel $input
-     * @param \App\Models\Products $product
      * @Authorized
      * @UserRole(0,1)
+     * @param SortProductsBindingModel $input
+     * @param Products $product
      */
     public function sort(SortProductsBindingModel $input, Products $product)
     {
